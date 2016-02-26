@@ -1,45 +1,130 @@
-/** {
-     border: solid red 1px !important;
-}*/
+
+body {
+	/*background-color: #F7F3E8;*/
+	background-color: #f2f2f2;
+	font-family: 'Roboto';
+}
+
+#pie1 {
+	margin-left: 5%;
+}
+
+.legend {
+  vertical-align: top;
+  margin-left: -43%;
+  z-index: 100;
+  margin-top: 20px;
+}
+
+
+#locationName {
+	width: 30%;
+	color: #2B3E42;
+	margin: 0 auto;
+	padding: 30px;
+	background-color: #ffffff;
+	border-radius: 10px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+	box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+	text-align: center;
+}
+
+
+#selector {
+	width: 30%;
+	margin: 0 auto;
+	background-color: #ffffff;
+	box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	text-align: center;
+	border-radius: 10px;
+}
+
+#selector p {
+	font-size: 20px;
+	display: inline;
+	color: #2B3E42;
+}
+
+#locSelect {
+	border: 2px solid #2B3E42;
+	background-color: #ffffff;
+	font-size: 18px;
+	color: #2B3E42;
+}
+
+#select {
+	border: 2px solid #2B3E42;
+	background-color: #ffffff;
+	font-size: 18px;
+	color: #2B3E42;
+}
+
+#graph{	
+	width: 90%;
+	margin: 0 auto;
+}
+
+.svg {
+	margin: 0 auto;
+	background-color: white;
+	border-radius: 10px;
+	margin-bottom: 30px;
+	box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+
+}
+
+.svgDiv {
+	height: 500px;
+	width: 30%;
+	float: right;
+	background-color: red;
+	margin-top: 30px;
+}
+
+.svgDiv h3 {
+	text-align: center;
+}
+
+.svgDiv h3 p {
+	font-size: 15px;
+	font-weight: 300;
+}
+
+
+
 .xaxis path,
 .xaxis line,
 .yaxis path,
 .yaxis line {
+	stroke-width: 3px;
 	fill: none;
-	stroke: black;
+	stroke: #2B3E42;
 	shape-rendering: crispEdges;
 }
 
 .xaxis text,
 .yaxis text {
-	font-family: 'helvetica';
-	font-size: 11px;
-}
-
-input {
-	width: 100%;
-	font-size: 14px;
-	line-height: 2em;
+	font-family: 'Roboto';
+	font-size: 12px;
+	font-weight: 500;
+	fill: #2B3E42;
 }
 
 .center-text {
 	text-align: center;
 }
 
-li {
-	cursor: pointer;
-}
-
-li:hover {
-	background-color: #FFFACD;
-}
 
 .chartTitle {
 	font-size: 20px;
+	font-weight: 700;
+	fill: #2B3E42;
 }
 
 .graphlabel {
-	font-family: 'helvetica';
+	font-family: 'Roboto';
 }
 
 rect {
@@ -50,5 +135,5 @@ rect {
 }
 
 rect:hover {
-	fill: firebrick;
+	fill: #DC4032;
 }
