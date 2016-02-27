@@ -1,88 +1,92 @@
 $(document).ready(function(){
 
-var location
+	var location
 
-var tables = [
-	"B01001", //age by sex
-	"B14001", //current enrollment by age education
-	"B19001", //household income 1 year
-	"B02001"  //race
-	];
+	var tables = [
+		"B01001", //age by sex
+		"B14001", //current enrollment by age education
+		"B19001", //household income 1 year
+		"B02001"  //race
+		];
 
-var len = tables.length;
+	var len = tables.length;
 
-$('#select').on('click', function(){
-	clear();
-	
-	var location = $("#locSelect").val();
-	var location = String(location);
-	var table = tables[0];
-	titleIt(location, table);
+	$('#select').on('click', function(){
+		clear();
+		
+		var location = $("#locSelect").val();
+		var location = String(location);
+		var table = tables[0];
+		titleIt(location, table);
 
-function titleIt(location, table, len){	
-	d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + table + "&geo_ids="+location, function(error,response) {
-	var locationN = response.geography[location]['name'];
-	console.log(locationN);
-	$('#locationName').append("<h2>" + locationN + "</h2>");
-	});
-};
-
-
-for(var i = 0; i < tables.length; i++){
-	var table = tables[i];
-	var location = $("#locSelect").val();
-	var location = String(location);
-	
-	// calls function that finds the location of the first table and posts it to the page
-	chartIt(location, table);
-	
-function chartIt(location, table){
-
-
-	d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + table + "&geo_ids="+location, function(error,response) {
-  	var data = response.data[location][table].estimate;
-  
-	keyArray = [];
-	valueArray = [];
-	for (value in data) {
-	    if (data.hasOwnProperty(value)) {
-	        valueArray.push(data[value]); 
-	        // Push the key's value on the array
-	    }
-	}
-	// sets a variable for the titles of the graphs
-  	var title = response.tables[table].title;
-
-  	// sets a variable for the bar labels
-	var labels = response.tables[table].columns;
-
-  	for (key in labels) {
-  		// keyArray.push(labels[key]);
-  		keyArray.push(labels[key]['name']);
-  	}
-
-	// create an empty dataset array variable for d3
-	var dataset = [];
-
-	// loop through keyArray (array of keys) and valueArray(array of values) to create object instances
-	for(var i = 1; i < keyArray.length; i++){
-		var item = new Object();
-			item.key = keyArray[i];
-			item.value = valueArray[i];
-			dataset.push(item);
+	function titleIt(location, table, len){	
+		d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + table + "&geo_ids="+location, function(error,response) {
+		var locationN = response.geography[location]['name'];
+		console.log(locationN);
+		$('#locationName').append("<h2>" + locationN + "</h2>");
+		});
 	};
 
-	console.log(dataset);
 
-	// calls the function that actually builds the charts
-	visualizeIt(dataset, title);
-	});
-	};};
+	for(var i = 0; i < tables.length; i++){
+		var table = tables[i];
+		var location = $("#locSelect").val();
+		var location = String(location);
+		
+		// calls function that finds the location of the first table and posts it to the page
+		chartIt(location, table);
+		
+		function chartIt(location, table){
+
+
+			d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + table + "&geo_ids="+location, function(error,response) {
+		  	var data = response.data[location][table].estimate;
+		  
+			keyArray = [];
+			valueArray = [];
+			for (value in data) {
+			    if (data.hasOwnProperty(value)) {
+			        valueArray.push(data[value]); 
+			        // Push the key's value on the array
+			    }
+			}
+			// sets a variable for the titles of the graphs
+		  	var title = response.tables[table].title;
+
+		  	// sets a variable for the bar labels
+			var labels = response.tables[table].columns;
+
+		  	for (key in labels) {
+		  		// keyArray.push(labels[key]);
+		  		keyArray.push(labels[key]['name']);
+		  	}
+
+			// create an empty dataset array variable for d3
+			var dataset = [];
+
+			// loop through keyArray (array of keys) and valueArray(array of values) to create object instances
+			for(var i = 1; i < keyArray.length; i++){
+				var item = new Object();
+					item.key = keyArray[i];
+					item.value = valueArray[i];
+					dataset.push(item);
+			};
+
+			console.log(dataset);
+
+			// calls the function that actually builds the charts
+			visualizeIt(dataset, title);
+				
+			});
+		};
+	};
 });
+// this function constructs the charts
 function visualizeIt(dataset, title) {
+	// set a variable the longest chart column label, to be used for defining the length of the area alloted for labels
 	var bot = d3.max(dataset, function(d) {return d.key.length; } );
-	console.log(bot);
 
+	// sets the margins for the svg
 	var margin = {
 		top: 70, 
 		right: 10, 
@@ -112,7 +116,7 @@ function visualizeIt(dataset, title) {
 	var div = d3.selectAll("#graph")
 		.append("div")
 		.attr("class", "svgDiv")
-		.append("h3")
+	  	.append("h3")
 		.append("text")
 		.text(title)
 		.append("p")
@@ -204,6 +208,7 @@ function visualizeIt(dataset, title) {
 		d3.selectAll("svg").remove();
 		$("h2").remove();
 		$(".svgDiv").remove();
+		$(".pieSideDiv").remove();
 	};
 });
 

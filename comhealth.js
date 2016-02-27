@@ -10,13 +10,13 @@ $(document).ready(function(){
 		left: 20,
 	}
 
-	var width = 600;
+	var width = 600 + margin.left + margin.right;
 	var height = 400;
-	
+
 	var radius = Math.min(width, height) / 2;
 
 	var color = d3.scale.ordinal()
-		.range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
+		.range(["#F6776A", "#024E83", "#97DCDD", "#DC4032", "#78C652"]);
 
 	var arc = d3.svg.arc()
 		.outerRadius(radius - 10)
@@ -71,6 +71,7 @@ $(document).ready(function(){
 
 		console.log(percent);
 
+		// this block filters out all of the duplicates in the boroughs array, leaving us with just the 5 boroughs
 		var bor = boroughs.filter(function(x, i){
 			return boroughs.indexOf(x) == i;
 		});
@@ -84,11 +85,12 @@ $(document).ready(function(){
 			data.push(item);
 		};
 
+		console.log(data);
 		var legend = d3.select("#pie1")
 			.append("svg")
 			.attr("class", "legend")
 			.attr("width", 120)
-			.attr("height", (data.length - 1) * 20)
+			.attr("height", (data.length) * 20)
 			.selectAll("g")
 			.data(data)
 			.enter()
@@ -98,14 +100,13 @@ $(document).ready(function(){
 		legend.append("rect")
 			.attr("width", 18)
 			.attr("height", 18)
-			.style("fill", color);
+			.style("fill", function(d) { return color(d.key); });
 
 		legend.append("text")
 			.attr("x", 24)
 			.attr("y", 9)
 			.attr("dy", ".35em")
-			.text(function(d) { return d; });
-		console.log(data);
+			.text(function(d) { return d.key; });
 
 		var g = svg.selectAll(".arc")
 			.data(pie(data))
@@ -119,8 +120,9 @@ $(document).ready(function(){
 		g.append("text")
 			.attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
 			.attr("dy", ".35em")
-			.text(function(d) { return d.data.percent; });
-
+			.text(function(d) { return d.data.percent; })
+			.style("text-anchor", "middle")
+			.attr("fill", "#ffffff");
 		});
 
 	var svg = d3.select("#pie1").append("svg")
@@ -130,7 +132,9 @@ $(document).ready(function(){
 		.append("g")
 		.attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-
+	var pieSideDiv = d3.select("#pie1")
+		.append("div")
+		.attr("class", "pieSideDiv");
 
 		function type(d) {
 			d.value = +d.value;
@@ -140,7 +144,7 @@ $(document).ready(function(){
 });
 
 
-d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
+	d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
 		console.log(response);
 	})
 
