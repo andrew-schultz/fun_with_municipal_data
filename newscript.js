@@ -12,18 +12,16 @@ $(document).ready(function(){
 	var len = tables.length;
 
 	$('#select').on('click', function(){
-		clear();
-		
-		var location = $("#locSelect").val();
-		var location = String(location);
-		var table = tables[0];
-		titleIt(location, table);
 
 	function titleIt(location, table, len){	
 		d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + table + "&geo_ids="+location, function(error,response) {
-		var locationN = response.geography[location]['name'];
-		console.log(locationN);
-		$('#locationName').append("<h2>" + locationN + "</h2>");
+			var locationN = response.geography[location]['name'];
+			console.log(locationN);
+			$('#locationName').animate({
+				left: '-25%',
+			});
+			$('#locationName').append("<h2>" + locationN + "</h2>");
+			
 		});
 	};
 
@@ -202,7 +200,7 @@ function visualizeIt(dataset, title) {
 		.attr("text-anchor", "middle")
 		.attr("transform", "translate(" + (w/2) + ", 40)")
 		.text(title);
-}
+	}
 
 	function clear(){
 		d3.selectAll("svg").remove();
@@ -210,6 +208,7 @@ function visualizeIt(dataset, title) {
 		$(".svgDiv").remove();
 		$(".pieSideDiv").remove();
 	};
+
 });
 
 			

@@ -58,6 +58,34 @@ body {
 	color: #ffffff;
 }
 
+.filter_button {
+	padding: 15px;
+	background-color: #ffffff;
+	border-radius: 10px;
+	position: absolute;
+	z-index: 10;
+	margin: 10px;
+	max-width: 46px;
+}
+
+#garden {
+	left: 5px;
+}
+
+#health {
+	left: 60px;
+}
+
+#mapInfo {
+	width: 30%;
+	min-width: 300px;
+	max-width: 500px;
+	background-color: #ffffff;
+	border-radius: 10px;
+	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
+	border: 1px solid #024E83;
+}
+
 #selector {
 	width: 30%;
 	margin-left: auto;
