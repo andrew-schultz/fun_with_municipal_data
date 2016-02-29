@@ -1,27 +1,25 @@
+$(document).ready(function(){
 
-var MapboxClient = require('mapbox');
-var client = new MapboxClient('pk.eyJ1IjoiYXMxNzMxNzEiLCJhIjoiY2lsNDR6bWdwM3cxb3Z5bTNvbmtmeTJsbiJ9.16HxpvRVaoKgLOBG9L-Quw');
-
-d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
-	var healthcenters = response;
-	var health_address = response.center_address;
-});
-
-map_markers(health_address);
-
-var f = client.geocodeForward("https://api.mapbox.com/geocoding/v5/mapbox.places/1600+pennsylvania+ave+nw.json?access_token=pk.eyJ1IjoiYXMxNzMxNzEiLCJhIjoiY2lrdDljeGNjMDAybHZvbTNhZDFoaXliNSJ9.SvzsJFUNo8uBXrtclVlywA");
-console.log(f)
-
-function map_markers(group){
-	var hcenters = [];
-	for(centers in group){
-		// d3.json("https://api.mapbox.com/geocoding/v5/mapbox.places/" + centers + ".json?proximity=-73.977800,40.715824&access_token=pk.eyJ1IjoiYXMxNzMxNzEiLCJhIjoiY2lsNDR6bWdwM3cxb3Z5bTNvbmtmeTJsbiJ9.16HxpvRVaoKgLOBG9L-Quw", function(response) {
-			
-			client.geocodeForward(centers, function(err, res){
-				hcenters.push(res);
-			})
+	d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
+		var healthcenters = response;
+		var health_address = [];
+		for(var i = 0; i < healthcenters.length; i++){
+			var str = healthcenters[i].center_address.replace(/ /g, "+");
+			health_address.push(str);
 		};
+		console.log(health_address);
+		map_markers(health_address);
+	});
+
+	var map_markers = function(group){
+
+		for(var i = 0; i < group.length; i++){
+			var markers = [];
+			d3.json("https://maps.googleapis.com/maps/api/geocode/json?address=" + group[i] + "&components=administrative_area:NY&key=AIzaSyAa-qYzg4MO0srP1OdmsdN2hAqzMJhPBXo", function(error, response){
+				var addr = response;
+				markers.push(addr);
+			});
+		};
+		console.log(markers);
 	};
-	console.log(hcenters);
-
-
+});

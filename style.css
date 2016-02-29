@@ -1,32 +1,43 @@
 
 body {
 	/*background-color: #F7F3E8;*/
-	background-color: #f1f1f1;
-	font-family: 'Roboto';
+	background-color: rgb(227, 227, 220);
+	font-family: 'Lato';
 	margin: 0;
 	margin-top: -16px;
+}
+
+.pietitle {
+	font-size: 24px;
+	font-weight: 700;
+}
+
+.ul li {
+	font-weight: 400;
+	font-size: 14px;
 }
 
 #pie1 {
 	margin-left: 5%;
 	margin-top: 20px;
+	display: inline-block;
 }
 
 .legend {
-  vertical-align: top;
-  margin-left: -47%;
-  z-index: 100;
-  margin-top: 20px;
+	vertical-align: top;
+	margin-left: -90%;
+	z-index: 100;
+	margin-top: 60px;
 }
 
-.pieSideDiv {
-	height: 400px;
-	width: 43%;
-	background-color: #ffffff;
+#hchart {
 	border-radius: 10px;
-	float: right;
-	margin-right: 5%;
-	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+	display: inline-block;
+	margin-left: 3.5%;
+}
+
+.pietitle {
+	fill: #2B3E42;
 }
 
 #locationName {
@@ -35,7 +46,7 @@ body {
 	margin-top: -22%;
 	margin-left: 32.5%;
 	padding: 30px;
-	background-color: #ffffff;
+	background-color: rgb(251, 252, 247);
 	border-radius: 10px;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
 	z-index: 100;
@@ -76,11 +87,15 @@ body {
 	left: 60px;
 }
 
+#info {
+	background-color: rgba(0, 0, 0, 0.8);
+}
+
 #mapInfo {
 	width: 30%;
 	min-width: 300px;
 	max-width: 500px;
-	background-color: #ffffff;
+	background-color: rgb(251, 252, 247);
 	border-radius: 10px;
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 	border: 1px solid #024E83;
@@ -91,7 +106,7 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 20px;
-	background-color: #ffffff;
+	background-color: rgb(251, 252, 247);
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 	padding: 20px;
 	text-align: center;
@@ -119,13 +134,20 @@ body {
 }
 
 #graph{	
-	width: 90%;
-	margin: 0 auto;
+	width: 60%;
+	margin-left: 5%;
+	display: inline-block;
+}
+
+#tables{
+	width: 25%;
+	display: inline-block;
+	margin-left: 3%;
 }
 
 .svg {
 	margin: 0 auto;
-	background-color: #ffffff;
+	background-color: rgb(251, 252, 247);
 	border-radius: 10px;
 	margin-bottom: 30px;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
@@ -135,7 +157,7 @@ body {
 	height: 550px;
 	width: 30%;
 	float: right;
-	background-color: #ffffff;
+	background-color: rgb(251, 252, 247);
 	/*margin-top: 30px;*/
 	border-radius: 10px;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
@@ -184,12 +206,10 @@ body {
 }
 
 rect {
-	-moz-transition: all 0.3s;
-	-o-transition: all 0.3s;
-	-webkit-transition: all 0.3s;
 	transition: all 0.3s;
 }
 
 rect:hover {
 	fill: #DC4032;
 }
+

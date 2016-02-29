@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>d3 fun</title>
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:300,400,700" type="text/css">
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 	<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.3/mapbox-gl.js'></script>
@@ -11,7 +11,6 @@
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="newscript.js"></script>
 	<script src="comhealth.js"></script>
-	
 </head>
 <body>
 	<div id="header">
@@ -34,23 +33,11 @@
 
 		var map = new mapboxgl.Map({
 	    	container: 'map', // container id
-	    	style: 'mapbox://styles/as173171/cil5j5p9g008j9rm844zst11t', //hosted style id
+	    	style: 'mapbox://styles/as173171/ciku69e5q009998kmnudm6j2e', //hosted style id
 	   		center: [-73.977800, 40.715824], // starting position
 	   		zoom: 10, // starting zoom
 		});
 
-		var MapboxClient = require('mapbox');
-var client = new MapboxClient('pk.eyJ1IjoiYXMxNzMxNzEiLCJhIjoiY2lsNDR6bWdwM3cxb3Z5bTNvbmtmeTJsbiJ9.16HxpvRVaoKgLOBG9L-Quw');
-
-d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
-	var healthcenters = response;
-	var health_address = response.center_address;
-});
-
-map_markers(health_address);
-
-var f = client.geocodeForward("https://api.mapbox.com/geocoding/v5/mapbox.places/1600+pennsylvania+ave+nw.json?access_token=pk.eyJ1IjoiYXMxNzMxNzEiLCJhIjoiY2lrdDljeGNjMDAybHZvbTNhZDFoaXliNSJ9.SvzsJFUNo8uBXrtclVlywA");
-console.log(f)
 
 		map.on('style.load', function(){
 			map.addSource('boroughs', {
@@ -94,15 +81,29 @@ console.log(f)
 					if (!err && features.length) {
 						map.setFilter("route-hover", ["==", "BoroCode", features[0].properties.BoroCode]);
 					} else {
-						map.setFilter("route-hover", ["==", "name", ""]);
+						map.setFilter("route-hover", ["==", "BoroName", features[1].properties.BoroName]);
 					}
 				});
 			});
 
-		});
+			// on hover
+			// check to see what the filter / borocode is (features[0])
+			// pan to 
+
+			// map.on("click", function(e){
+			// 	map.featuresAt(e.point, {
+			// 		radius: 5, 
+			// 		layers: ["boroughs-fill"]
+			// 	}, 
+
+
+			// });
+
+		
 
 		// disable zooming on scroll, makes it easier to navigate around the page without accidentally zooming way out or way in
 		map.scrollZoom.disable();
+		map.doublClickZoom.disable();
 		map.on('click', function(data) {
 		  var e = data && data.originalEvent;
 		  console.log('got click ' + (e ? 'button = ' + e.button : ''));
@@ -121,14 +122,14 @@ console.log(f)
 					return;
 				}
 
-				var feature = features[0];
+				var feature = features[1];
 
 				popup.setLngLat(map.unproject(e.point))
 					.setHTML(feature.properties.BoroName)
 					.addTo(map);
 			});
 		});
-
+		});
 	</script>
 	<div id="locationName">
 		<h2>Select a Burough</h2>
@@ -144,7 +145,9 @@ console.log(f)
 		<button id="select">Select</button>
 	</div>
 	<div id="pie1"></div>
+	<div id="hchart"></div>
 	<div id="graph"></div>
+	<div id="tables"></div>
 </body>
 </html>
 

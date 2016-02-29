@@ -12,6 +12,12 @@ $(document).ready(function(){
 	var len = tables.length;
 
 	$('#select').on('click', function(){
+		clear();
+		
+		var location = $("#locSelect").val();
+		var location = String(location);
+		var table = tables[0];
+		titleIt(location, table);
 
 	function titleIt(location, table, len){	
 		d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + table + "&geo_ids="+location, function(error,response) {
@@ -71,10 +77,9 @@ $(document).ready(function(){
 			};
 
 			console.log(dataset);
-
 			// calls the function that actually builds the charts
 			visualizeIt(dataset, title);
-				
+
 			});
 		};
 	};
@@ -88,7 +93,7 @@ function visualizeIt(dataset, title) {
 	var margin = {
 		top: 70, 
 		right: 10, 
-		bottom: (bot * 4),
+		bottom: (bot + 20),
 		left: 100
 	};
 	
@@ -109,21 +114,13 @@ function visualizeIt(dataset, title) {
 		.append("svg")
 		.attr("class", "svg")
 		.attr("width", w + margin.left + margin.right)
-		.attr("height", h + margin.top + margin.bottom);
-
-	var div = d3.selectAll("#graph")
-		.append("div")
-		.attr("class", "svgDiv")
-	  	.append("h3")
-		.append("text")
-		.text(title)
-		.append("p")
-		.append("text")
-		.text(title);
+		.attr("height", h + margin.top + margin.bottom)
+		
+	
 
 	//Define the X scale
 	var xScale = d3.scale.ordinal()
-		.domain(dataset.map(function (d) {return d.key;}))
+		.domain(dataset.map(function (d){return d.key;}))
 		.rangeRoundBands([margin.left, w], 0.05);
 
 	//Define the X Axis
@@ -163,6 +160,54 @@ function visualizeIt(dataset, title) {
 		// .attr("transform", "translate(105, 0)")
 		.attr("fill", "#024E83");
 
+	// display popups when you scroll over a bar
+	bars.on("mouseover", function(d){
+
+		svg.append("text")
+			.attr("id", "info");
+
+		// get the x and y positions for the popup in question
+		var xPos = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand()/2;
+		var yPos = parseFloat(d3.select(this).attr("y")) + 18;
+		
+		// add the actual info
+		svg.select("#info")
+			.attr("x", xPos)
+			.attr("y", function(){
+				// if the bar is very small, diplay the tooltip above it instead of trying to cram it inside
+				var x = d3.max(dataset, function(d) { return d.value; });
+				if (d.value < 0.1 * x) {
+					return yPos - 22;
+				} else {
+					return yPos;
+				};
+			})
+			.attr("text-anchor", "middle")
+			.style("font-family", "Lato")
+			.attr("fill", function(){
+				// change the color of the info based on where it's going to be displayed(if the value is small, make it a darker color since it'll be on the white background)
+				var x = d3.max(dataset, function(d) { return d.value; });
+				if (d.value < 0.1 * x) {
+					return "#2B3E42";
+				} else {
+					return "#ffffff";
+				};
+			})
+			// .attr("padding", function(){
+			// 	if(xScale.rangeBand() < 25){
+			// 		return "10px";
+			// 	} else {
+			// 		return "0px";
+			// 	};
+			// })
+			.attr("font-size", "12px")
+			.text(d.value);
+	})
+	.on("mouseout", function(){
+		d3.select("#info").remove();
+	});
+		
+
 	// draw the X axis
 	svg.append("g")
 		.attr("class", "xaxis")
@@ -170,15 +215,23 @@ function visualizeIt(dataset, title) {
 		.call(xAxis)
 		.selectAll("text")
 		.style("text-anchor", "end")
+		.style("font-family", "Lato")
 		.attr("dx", "-.8em")
 		.attr("dy", ".15em")
-		.attr("transform", "rotate(-65)");
+		.attr("transform", "rotate(-65)")
+		.text(function(d){
+			if(d.length > 15){
+				return d.substr(0, 15) + "...";
+			} else {
+				return d;
+			}
+		});
 
 	//draw the Y axis
-	svg.append("g")
-		.attr("class", "yaxis")
-		.attr("transform", "translate(" + margin.left + ",0)")
-		.call(yAxis);
+	// svg.append("g")
+	// 	.attr("class", "yaxis")
+	// 	.attr("transform", "translate(" + margin.left + ",0)")
+	// 	.call(yAxis);
 
 	// add the X axis label
 	svg.append("text")
@@ -198,8 +251,153 @@ function visualizeIt(dataset, title) {
 	svg.append("text")
 		.attr("class", "chartTitle graphlabel")
 		.attr("text-anchor", "middle")
-		.attr("transform", "translate(" + (w/2) + ", 40)")
+		.attr("transform", "translate(" + ((w/2)+ 60) + ", 40)")
+		.style("font-family", "Lato")
 		.text(title);
+
+		donutIt(dataset, title);
+}
+
+	function donutIt(dataset, title){
+
+		var margin = {
+		top: 20, 
+		right: 10, 
+		bottom: 20,
+		left: 10
+		};
+		
+		var width = 400 - margin.left - margin.right;
+		var height = 550 - margin.top - margin.bottom;
+		var w = width;
+		var h = height;
+
+		var radius = Math.min(width, height) / 2;
+
+		var currentVal;
+
+		var color = d3.scale.ordinal()
+			.range(["#F6776A", "#024E83", "#97DCDD", "#DC4032", "#78C652"]);
+			
+		var pie = d3.layout.pie()
+			.sort(null)
+			.value(function(d) { return d.value });
+
+		//Create the SVG element
+		
+		var arc = d3.svg.arc()
+			.outerRadius(radius - 10)
+			.innerRadius(radius - (radius/2.5));
+
+		var svg = d3.select("#tables")
+			.append("svg")
+			.attr("class", "svg donut1")
+			.attr("width", w)
+			.attr("height", h + margin.top + margin.bottom)
+			.append("g")
+			.attr("transform", "translate(" + width /2 + "," + ((height/ 2) + 100) + ")");
+
+		svg.append("text")
+			.attr("class", "chartTitle graphlabel")
+			.attr("text-anchor", "middle")
+			.attr("transform", "translate( 0 , -200)")
+			.style("font-family", "Lato")
+			.text(title);
+
+		var g = svg.selectAll(".arc")
+			.data(pie(dataset))
+			.enter()
+			.append("g")
+			.attr("class", "arc");
+
+		g.append("path")
+			// Attach current value to g so it can be used for animation
+			.each(function(d) { this._current = d; })
+			.attr("d", arc)
+			.style("fill", function(d) { return color(d.data.key); });
+
+		// g.append("text")
+		// 	.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+		// 	.attr("dy", ".35em")
+		// 	.style("text-anchor", "middle");
+
+		// g.select("text")
+		// 	.text(function(d) { return d.data.key; });
+
+		svg.append("text")
+			.datum(dataset.key)
+			.attr("x", 0)
+			.attr("y", 0 + radius/30)
+			.attr("class", "text-info1")
+			.style("text-anchor", "middle")
+			.attr("font-weight", "bold")
+			.style("font-size", radius/10+"px");
+
+		svg.append("text")
+			.datum(dataset.key)
+			.attr("x", 0)
+			.attr("y", 0 + radius/8)
+			.attr("class", "text-info2")
+			.style("text-anchor", "middle")
+			.attr("font-weight", "bold")
+			.style("font-size", radius/12+"px");
+
+		g.on("mouseover", function(obj){
+			console.log(obj)
+			svg.select("text.text-info1")
+				.attr("fill", "#000000")
+				.text(function(d){
+					console.log([obj.data.key]);
+					return [obj.data.key];
+				});
+			
+			svg.select("text.text-info2")
+				.attr("fill", function(d) { return color(obj.data.key); })
+				.text(function(d){
+					return [obj.value];
+				});
+				// .attr("transform", "translate(0, 20)");
+		});
+
+		g.on("mouseout", function(obj){
+			svg.select("text.text-info1").text("");
+			svg.select("text.text-info2").text("");
+		});
+
+		
+		
+
+
+		// svg.append("g")
+		// 	.attr("class", "table_title")
+		// 	.append("text")
+		// 	.attr("transform", "translate(0, 50)")
+		// 	.text(title);
+			
+		// svg.append("g")
+		// 	.attr("width", width / 2)
+		// 	.attr("height", h - margin.top - margin.bottom)
+		// 	.attr("fill", "red")
+		// 	.attr("class", "col1")
+		// 	.append("ul")
+		// 	.attr("class", "ul1")
+		// 	.append("li")
+		// 	.append("text");
+			
+
+
+			// .text(dataset.map(function (d){return d.key;}));
+		
+			// for(var i = 0; i < dataset.length; i++){
+			// 	$(".ul1").append("<li>" + dataset[i].key + "</li>");
+			// };
+		
+
+		// svg.append("g")
+		// 	.attr('class', "col2")
+		// 	.append("ul")
+		// 	.attr("class", "ul2");
+
 	}
 
 	function clear(){
@@ -208,7 +406,6 @@ function visualizeIt(dataset, title) {
 		$(".svgDiv").remove();
 		$(".pieSideDiv").remove();
 	};
-
 });
 
 			
