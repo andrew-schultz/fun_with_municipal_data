@@ -2,12 +2,11 @@ $(document).ready(function(){
 
 	$('#select').on('click', function(){
 
-	
-		d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
-			var comHealth = response;
+		d3.json("https://data.cityofnewyork.us/resource/ajxm-kzmj.json", function(error, response){
+			var garden = response;
 			var boroughs = []
-			for (value in comHealth){
-				boroughs.push(comHealth[value]['__name_of_borough']);
+			for (x in garden){
+				boroughs.push(garden[x]['boro']);
 			};
 			var bk = 0;
 			var bx = 0;
@@ -16,47 +15,48 @@ $(document).ready(function(){
 			var q = 0;
 			var bvals = [];
 			for(i in boroughs){
-				if(boroughs[i] == "Brooklyn"){
+				if(boroughs[i] == "B"){
 					bk += 1
-				} else if (boroughs[i] == "Bronx"){
+				} else if (boroughs[i] == "X"){
 					bx += 1
-				} else if (boroughs[i] == "Queens"){
+				} else if (boroughs[i] == "Q"){
 					q += 1
-				} else if (boroughs[i] == "Manhattan"){
+				} else if (boroughs[i] == "M"){
 					m += 1
 				} else {
 					si += 1
 				};
-				
 			};
-		
+
 			bvals.push(bx);
 			bvals.push(bk);
 			bvals.push(m);
 			bvals.push(q);
 			bvals.push(si);
 
-
 			var percent = [];
-			for( i in bvals){
+			for(i in bvals){
+				// percent.push(bvals[i])
 				percent.push(((bvals[i] / boroughs.length) * 100).toFixed(2) + "%");
 			};
-
 			console.log(percent);
 
 			// this block filters out all of the duplicates in the boroughs array, leaving us with just the 5 boroughs
-			var bor = boroughs.filter(function(x, i){
-				return boroughs.indexOf(x) == i;
-			});
+			// var bor = boroughs.filter(function(x, i){
+			// 	return boroughs.indexOf(x) == i;
+			// });
+			var bor = ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"];
+			console.log(bor);
 
 			var data = [];
-			for(var i = 0; i < bor.length; i++){
+			for (var i = 0; i < bor.length; i++){
 				var item = new Object();
 					item.key = bor[i];
 					item.value = bvals[i];
 					item.percent = percent[i];
 					data.push(item);
 			};
+			console.log(data);
 			chartIt(data);
 			pieIt(data);
 		});
@@ -77,7 +77,7 @@ $(document).ready(function(){
 			var color = d3.scale.ordinal()
 				.range(["#F6776A", "#024E83", "#97DCDD", "#DC4032", "#78C652"]);
 
-			var svg = d3.select("#hchart")
+			var svg = d3.select("#gchart")
 				.append("svg")
 				.attr("class", "svg")
 				.attr("width", w + margin.left + margin.right)
@@ -163,7 +163,7 @@ $(document).ready(function(){
 				.attr("text-anchor", "middle")
 				.attr("transform", "translate(" + ((w/2)+ 40) + ", 40)")
 				.style("font-family", "Lato")
-				.text("Community Health Center Distrubution");
+				.text("'GreenThumb' Community Garden Distrubution");
 		};
 
 		function pieIt(data){
@@ -183,9 +183,9 @@ $(document).ready(function(){
 			var color = d3.scale.ordinal()
 				.range(["#F6776A", "#024E83", "#97DCDD", "#DC4032", "#78C652"]);
 
-			var svg = d3.select("#pie1")
+			var svg = d3.select("#pie2")
 				.append("svg")
-				.attr("class", "svg pie1")
+				.attr("class", "svg pie2")
 				.attr("width", width)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
@@ -203,17 +203,17 @@ $(document).ready(function(){
 				.sort(null)
 				.value(function(d) { return d.value; });
 
-			var legend = d3.select("#pie1")
+			var legend = d3.select("#pie2")
 				.append("svg")
 				.attr("class", "legend")
-				.attr("width", 200)
+				.attr("width", 125)
 				.attr("height", (data.length) * 20)
 				.selectAll("g")
 				.data(data)
 				.enter()
 				.append("g")
 				.attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
+			
 			legend.append("text")
 				.attr("class", "legendText")
 				.attr("x", 24)
@@ -237,7 +237,8 @@ $(document).ready(function(){
 				.style("fill", function(d) { return color(d.data.key); });
 
 			g.append("text")
-				.attr("transform", function(d) { return "translate(" + labelArc.centroid(d)+ ")"; })				.attr("dy", ".35em")
+				.attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+				.attr("dy", ".35em")
 				.text(function(d) { return d.data.percent; })
 				.style("text-anchor", "middle")
 				.attr("fill", "#ffffff");
@@ -246,14 +247,12 @@ $(document).ready(function(){
 				.attr("class", "pietitle")
 				.attr("text-anchor", "middle")
 				.attr("transform", "translate( 0 , -200)")
-				.text("Community Health Center Distrubution by Percent");
+				.text("'GreenThumb' Community Garden Distrubution by Percent");
 
 				function type(d) {
 					d.value = +d.value;
 					return d;
 				};
-			};
-		});
+		};
 	});
-
-	
+});

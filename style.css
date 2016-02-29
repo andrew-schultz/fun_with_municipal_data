@@ -21,23 +21,43 @@ body {
 	margin-left: 5%;
 	margin-top: 20px;
 	display: inline-block;
+	width: 45%;
+}
+
+.legendText {
+	z-index: 100;
 }
 
 .legend {
 	vertical-align: top;
-	margin-left: -90%;
-	z-index: 100;
+	margin-left: -600px;
 	margin-top: 60px;
 }
 
 #hchart {
 	border-radius: 10px;
 	display: inline-block;
-	margin-left: 3.5%;
+	width: 45%;
+	margin-left: 2.5%;
+}
+
+#gchart {
+	margin-left: 5%;
+	margin-top: 20px;
+	display: inline-block;
+	width: 45%;
+}
+
+#pie2 {
+	border-radius: 10px;
+	display: inline-block;
+	width: 45%;
+	margin-left: 1.25%;
 }
 
 .pietitle {
 	fill: #2B3E42;
+	font-size: 20px;
 }
 
 #locationName {
@@ -129,7 +149,8 @@ body {
 #select {
 	border: 2px solid #2B3E42;
 	background-color: #ffffff;
-	font-size: 18px;
+	border-radius: 5px;
+	font-size: 17px;
 	color: #2B3E42;
 }
 
@@ -184,7 +205,7 @@ body {
 
 .xaxis text,
 .yaxis text {
-	font-family: 'Roboto';
+	font-family: 'Lato';
 	font-size: 12px;
 	font-weight: 500;
 	fill: #2B3E42;
@@ -201,9 +222,9 @@ body {
 	fill: #2B3E42;
 }
 
-.graphlabel {
+/*.graphlabel {
 	font-family: 'Roboto';
-}
+}*/
 
 rect {
 	transition: all 0.3s;

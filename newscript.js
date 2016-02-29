@@ -295,15 +295,32 @@ function visualizeIt(dataset, title) {
 			.attr("width", w)
 			.attr("height", h + margin.top + margin.bottom)
 			.append("g")
-			.attr("transform", "translate(" + width /2 + "," + ((height/ 2) + 100) + ")");
+			.attr("transform", "translate(" + width /2 + "," + ((height/ 2) + 50) + ")");
+		var newtitle
+		function ntitle(d){
+			console.log(d);
+			if(d.length > 35){
+				var s = d.substr(29, 37);
+				var v = s.replace(/\s/, "\n");
+				var Ttitle = d.replace(s, v);
+				// console.log(ntitle);
+				return Ttitle;
+			} else {
+				return title;
+			};
+		};
+
+		newtitle = ntitle(title);
+		console.log(newtitle)
 
 		svg.append("text")
+			.attr("width", width/ 2)
 			.attr("class", "chartTitle graphlabel")
 			.attr("text-anchor", "middle")
 			.attr("transform", "translate( 0 , -200)")
 			.style("font-family", "Lato")
-			.text(title);
-
+			.text(newtitle);
+			
 		var g = svg.selectAll(".arc")
 			.data(pie(dataset))
 			.enter()

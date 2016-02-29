@@ -14,12 +14,27 @@ $(document).ready(function(){
 	var map_markers = function(group){
 
 		for(var i = 0; i < group.length; i++){
-			var markers = [];
+			
 			d3.json("https://maps.googleapis.com/maps/api/geocode/json?address=" + group[i] + "&components=administrative_area:NY&key=AIzaSyAa-qYzg4MO0srP1OdmsdN2hAqzMJhPBXo", function(error, response){
+				
+				var coords = [];
+				var addresses = [];
 				var addr = response;
-				markers.push(addr);
+				for(var q = 0; q < addr.length; q++){
+					coords.push(addr[q].results[0].geometry.location);
+					addresses.push(addr[q].results[0].formatted_address);
+				}
+				console.log(coords);
+				console.log(addresses);
+				var markers = [];
+				for (var x = 0; x < coords.length; x++){
+					var item = new Object();
+						item.address = addresses[x];
+						item.geo = coords[x];
+						markers.push(item);
+				};
+			console.log(markers);
 			});
-		};
-		console.log(markers);
+		};`
 	};
 });
