@@ -13,6 +13,10 @@ $(document).ready(function(){
 
 	$('#select').on('click', function(){
 		clear();
+
+		$("html, body").animate({
+			scrollTop: $('#pie1').offset().top
+		}, 800);
 		
 		$("#selectedBoroughs").fadeIn(400);
 
@@ -29,6 +33,7 @@ $(document).ready(function(){
 				left: '-25%',
 			});
 			$('#locationName').append("<h2>" + locationN + "</h2>");
+			$('#selectedBoroughs').prepend("<p id='bName'>" + locationN.toUpperCase() + "</p>");
 			
 		});
 	};
@@ -135,9 +140,6 @@ function visualizeIt(dataset, title) {
 	// creates bars
 	bars = svg.selectAll("rect").data(dataset);
 	
-	// creates labels (for bars)
-	barLabels = svg.selectAll("text").data(dataset);
-	
 	// add new bars
 	bars.enter()
 		.append("rect")
@@ -151,7 +153,6 @@ function visualizeIt(dataset, title) {
 		.attr("height", function(d) {
 			return h - yScale(d.value);
 		})
-		// .attr("transform", "translate(105, 0)")
 		.attr("fill", "#024E83");
 
 	// display popups when you scroll over a bar
@@ -184,21 +185,28 @@ function visualizeIt(dataset, title) {
 				if (d.value < 0.1 * x) {
 					return "#2B3E42";
 				} else {
-					return "#ffffff";
+					return "#2B3E42";
 				};
 			})
-			// .attr("padding", function(){
-			// 	if(xScale.rangeBand() < 25){
-			// 		return "10px";
-			// 	} else {
-			// 		return "0px";
-			// 	};
-			// })
 			.attr("font-size", "12px")
 			.text(d.value);
+
+		svg.append("text")
+			.attr("id", "bigBarLabel")
+
+		svg.select("#bigBarLabel")
+			.attr("x", (w / 2))
+			.attr("y", 80)
+			.attr("text-anchor", "middle")
+			.style("font-family", "Avenir")
+			.attr("fill", "#2B3E42")
+			.attr("font-size", "20px")
+			.text(d.key);
+
 	})
 	.on("mouseout", function(){
 		d3.select("#info").remove();
+		d3.select("#bigBarLabel").remove();
 	});
 		
 
@@ -221,7 +229,7 @@ function visualizeIt(dataset, title) {
 			}
 		});
 
-	//draw the Y axis
+	// draw the Y axis
 	// svg.append("g")
 	// 	.attr("class", "yaxis")
 	// 	.attr("transform", "translate(" + margin.left + ",0)")
@@ -416,6 +424,7 @@ function visualizeIt(dataset, title) {
 		$("h2").remove();
 		$(".svgDiv").remove();
 		$(".pieSideDiv").remove();
+		$("#bName").remove();
 	};
 });
 

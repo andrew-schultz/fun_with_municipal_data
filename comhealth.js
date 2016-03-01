@@ -139,10 +139,10 @@ $(document).ready(function(){
 						if (d.value < 0.1 * x) {
 							return "#2B3E42";
 						} else {
-							return "#ffffff";
+							return "#2B3E42";
 						};
 					})
-					.attr("font-size", "12px")
+					.attr("font-size", "18px")
 					.text(d.value);
 			})
 			.on("mouseout", function(){
@@ -154,6 +154,7 @@ $(document).ready(function(){
 				.attr("transform", "translate(20," + h + ")")
 				.call(xAxis)
 				.selectAll("text")
+				.style("font-size", "17px")
 				.style("font-family", "Avenir")
 				.style("text-anchor", "middle");
 				

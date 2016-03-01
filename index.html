@@ -11,6 +11,8 @@
 	<script src="newscript.js"></script>
 	<script src="comhealth.js"></script>
 	<script src="gardens.js"></script>
+	<script src="script.js"></script>
+
 </head>
 <body>
 	<div id="header">
@@ -19,12 +21,12 @@
 		</nav>
 	</div>
 	<div id="map_container">
-		<div class="filter_button" id="garden">
+		<!-- <div class="filter_button" id="garden">
 			<i class="fa fa-leaf"></i>
 		</div>
 		<div class="filter_button" id="health">
 			<i class="fa fa-medkit"></i>
-		</div>
+		</div> -->
 		<div id="map">
 		</div>
 	</div>
@@ -80,35 +82,15 @@
 				}, function (err, features){
 					if (!err && features.length) {
 						map.setFilter("route-hover", ["==", "BoroCode", features[0].properties.BoroCode]);
+					} else {
+						return;
 					}
-					// } else {
-					// 	map.setFilter("route-hover", ["==", "BoroName", features[0].properties.BoroName]);
-					// }
 				});
 			});
-
-			// on hover
-			// check to see what the filter / borocode is (features[0])
-			// pan to 
-
-			// map.on("click", function(e){
-			// 	map.featuresAt(e.point, {
-			// 		radius: 5, 
-			// 		layers: ["boroughs-fill"]
-			// 	}, 
-
-
-			// });
-
-		
 
 			// disable zooming on scroll, makes it easier to navigate around the page without accidentally zooming way out or way in
 			map.scrollZoom.disable();
 			map.doubleClickZoom.disable();
-			map.on('click', function(data) {
-			  var e = data && data.originalEvent;
-			  console.log('got click ' + (e ? 'button = ' + e.button : ''));
-			});
 
 			var popup = new mapboxgl.Popup();
 
@@ -116,7 +98,7 @@
 				map.featuresAt(e.point, {
 					radius: 1, 
 					includeGeometry: true,
-					layer: 'boroughs',
+					layer: ['boroughs'],
 				}, function (err, features) {
 					if (err || !features.length) {
 						popup.remove();
@@ -125,9 +107,29 @@
 
 					var feature = features[0];
 
+					// map.unproject(e.point) translates the pixel position of the point of the mouse into lat and long
 					popup.setLngLat(map.unproject(e.point))
 						.setHTML(feature.properties.BoroName)
 						.addTo(map);
+				});
+			});
+
+			map.on('click', function(e) {
+				map.featuresAt(e.point, {
+					radius: 1,
+					includeGeometry: true,
+					layer: ['boroughs'],
+				}, function (err, features) {
+					if (err || !features.length) {
+						return;
+					}
+
+					var feature = features[0];
+					// var e = data && data.originalEvent;
+					var id = feature.properties.BoroId;
+					console.log(feature);
+					map.panTo(map.unproject(e.point));
+					console.log(id);
 				});
 			});
 		});
@@ -142,20 +144,27 @@
 			<option value="06000US3600508510">Bronx</options>
 			<option value="06000US3606144919">Manhattan</options>
 			<option value="06000US3608570915">Staten Island</options>
+			<option value="16000US3651000">NYC</options>
 		</select>
 		<button id="select">Select</button>
 	</div>
 	<div id="healthCenters">
-		<div id="pie1"></div>
-		<div id="hchart"></div>
+		<div id="pie1" class="overall"></div>
+		<div id="hchart" class="overall"></div>
 	</div>
 	<div id="communityGardens">
-		<div id="gchart"></div>
-		<div id="pie2"></div>
+		<div id="gchart" class="overall"></div>
+		<div id="pie2" class="overall">
+			<div class="hidden_results">
+				Overall, Brooklyn is just the best.
+			</div>
+		</div>
 	</div>
 	<div id="selectedBoroughs">
 		<div id="graph"></div>
 		<div id="tables"></div>
+	</div>
+	<div id="footer">
 	</div>
 </body>
 </html>
