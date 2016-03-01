@@ -2,14 +2,24 @@
 body {
 	/*background-color: #F7F3E8;*/
 	background-color: rgb(227, 227, 220);
-	font-family: 'Lato';
+	font-family: 'Avenir';
 	margin: 0;
 	margin-top: -16px;
 }
 
+#selectedBoroughs {
+	background-color: #ffffff;
+	width: 90%;
+	margin: 0 auto;
+	padding-top: 100px;
+	border-radius: 10px;
+	display: none;
+}
+
 .pietitle {
-	font-size: 24px;
-	font-weight: 700;
+	font-weight: 500;
+	fill: #2B3E42;
+	font-size: 22px;
 }
 
 .ul li {
@@ -18,8 +28,8 @@ body {
 }
 
 #pie1 {
-	margin-left: 5%;
-	margin-top: 20px;
+	margin-left: 5.20%;
+	margin-top: 24px;
 	display: inline-block;
 	width: 45%;
 }
@@ -38,11 +48,11 @@ body {
 	border-radius: 10px;
 	display: inline-block;
 	width: 45%;
-	margin-left: 2.5%;
+	margin-left: 1.25%;
 }
 
 #gchart {
-	margin-left: 5%;
+	margin-left: 5.20%;
 	margin-top: 20px;
 	display: inline-block;
 	width: 45%;
@@ -55,18 +65,13 @@ body {
 	margin-left: 1.25%;
 }
 
-.pietitle {
-	fill: #2B3E42;
-	font-size: 20px;
-}
-
 #locationName {
 	width: 30%;
 	color: #2B3E42;
 	margin-top: -22%;
 	margin-left: 32.5%;
 	padding: 30px;
-	background-color: rgb(251, 252, 247);
+	background-color: #ffffff;
 	border-radius: 10px;
 	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
 	z-index: 100;
@@ -115,7 +120,7 @@ body {
 	width: 30%;
 	min-width: 300px;
 	max-width: 500px;
-	background-color: rgb(251, 252, 247);
+	background-color: #ffffff;
 	border-radius: 10px;
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 	border: 1px solid #024E83;
@@ -126,7 +131,7 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 20px;
-	background-color: rgb(251, 252, 247);
+	background-color: #ffffff;
 	box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
 	padding: 20px;
 	text-align: center;
@@ -140,57 +145,52 @@ body {
 }
 
 #locSelect {
-	border: 2px solid #2B3E42;
+	border: 1px solid #2B3E42;
 	background-color: #ffffff;
 	font-size: 18px;
 	color: #2B3E42;
 }
 
 #select {
-	border: 2px solid #2B3E42;
+	border: 1px solid #2B3E42;
 	background-color: #ffffff;
-	border-radius: 5px;
+	/*border-radius: 5px;*/
 	font-size: 17px;
 	color: #2B3E42;
 }
 
-#graph{	
-	width: 60%;
-	margin-left: 5%;
+#graph {	
+	width: 55%;
 	display: inline-block;
+	z-index: 100;
 }
 
-#tables{
+#tables {
 	width: 25%;
 	display: inline-block;
-	margin-left: 3%;
+	margin-left: 10%;
+}
+
+.donut1 {
+	margin: 0 auto;
+	/*background-color: #f2f2f2;*/
+	border-radius: 0px 10px 10px 0px;
+	margin-bottom: 120px;
 }
 
 .svg {
 	margin: 0 auto;
-	background-color: rgb(251, 252, 247);
+	background-color: #ffffff;
 	border-radius: 10px;
-	margin-bottom: 30px;
-	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+	margin-bottom: 120px;
+	/*box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);*/
 }
 
-.svgDiv {
-	height: 550px;
-	width: 30%;
-	float: right;
-	background-color: rgb(251, 252, 247);
-	/*margin-top: 30px;*/
+.citySvg {
+	margin: 0 auto;
+	background-color: #ffffff;
 	border-radius: 10px;
-	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
-}
-
-.svgDiv h3 {
-	text-align: center;
-}
-
-.svgDiv h3 p {
-	font-size: 15px;
-	font-weight: 300;
+	margin-bottom: 20px;
 }
 
 .xaxis path,
@@ -205,7 +205,7 @@ body {
 
 .xaxis text,
 .yaxis text {
-	font-family: 'Lato';
+	font-family: 'Avenir';
 	font-size: 12px;
 	font-weight: 500;
 	fill: #2B3E42;
@@ -217,14 +217,10 @@ body {
 
 
 .chartTitle {
-	font-size: 20px;
-	font-weight: 700;
+	font-size: 22px;
+	font-weight: 500;
 	fill: #2B3E42;
 }
-
-/*.graphlabel {
-	font-family: 'Roboto';
-}*/
 
 rect {
 	transition: all 0.3s;

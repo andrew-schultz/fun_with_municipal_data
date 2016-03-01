@@ -14,6 +14,8 @@ $(document).ready(function(){
 	$('#select').on('click', function(){
 		clear();
 		
+		$("#selectedBoroughs").fadeIn(400);
+
 		var location = $("#locSelect").val();
 		var location = String(location);
 		var table = tables[0];
@@ -92,21 +94,15 @@ function visualizeIt(dataset, title) {
 	// sets the margins for the svg
 	var margin = {
 		top: 70, 
-		right: 10, 
+		right: 200, 
 		bottom: (bot + 20),
-		left: 100
+		left: 60
 	};
 	
-	var width = 850 - margin.left - margin.right;
+	var width = 860;
 	var height = 550 - margin.top - margin.bottom;
 	var w = width;
 	var h = height;
-
-	//create a div for the svg to live inside
-	// var divG = d3.selectAll("body")
-	// 	.append("div")
-	// 	.attr("class", "graphDiv")
-		
 	
 	//Create the SVG element
 	
@@ -116,12 +112,10 @@ function visualizeIt(dataset, title) {
 		.attr("width", w + margin.left + margin.right)
 		.attr("height", h + margin.top + margin.bottom)
 		
-	
-
 	//Define the X scale
 	var xScale = d3.scale.ordinal()
 		.domain(dataset.map(function (d){return d.key;}))
-		.rangeRoundBands([margin.left, w], 0.05);
+		.rangeRoundBands([margin.left, (w - margin.left)], 0.05);
 
 	//Define the X Axis
 	var xAxis = d3.svg.axis()
@@ -183,7 +177,7 @@ function visualizeIt(dataset, title) {
 				};
 			})
 			.attr("text-anchor", "middle")
-			.style("font-family", "Lato")
+			.style("font-family", "Avenir")
 			.attr("fill", function(){
 				// change the color of the info based on where it's going to be displayed(if the value is small, make it a darker color since it'll be on the white background)
 				var x = d3.max(dataset, function(d) { return d.value; });
@@ -215,7 +209,7 @@ function visualizeIt(dataset, title) {
 		.call(xAxis)
 		.selectAll("text")
 		.style("text-anchor", "end")
-		.style("font-family", "Lato")
+		.style("font-family", "Avenir")
 		.attr("dx", "-.8em")
 		.attr("dy", ".15em")
 		.attr("transform", "rotate(-65)")
@@ -251,9 +245,9 @@ function visualizeIt(dataset, title) {
 	svg.append("text")
 		.attr("class", "chartTitle graphlabel")
 		.attr("text-anchor", "middle")
-		.attr("transform", "translate(" + ((w/2)+ 60) + ", 40)")
-		.style("font-family", "Lato")
-		.text(title);
+		.attr("transform", "translate(" + ((w/2)+ 215) + ", 20)")
+		.style("font-family", "Avenir")
+		.text(title.toUpperCase());
 
 		donutIt(dataset, title);
 }
@@ -261,13 +255,13 @@ function visualizeIt(dataset, title) {
 	function donutIt(dataset, title){
 
 		var margin = {
-		top: 20, 
-		right: 10, 
-		bottom: 20,
-		left: 10
+		top: 50, 
+		right: 70, 
+		bottom: 30,
+		left: 40
 		};
 		
-		var width = 400 - margin.left - margin.right;
+		var width = 400 - margin.left;
 		var height = 550 - margin.top - margin.bottom;
 		var w = width;
 		var h = height;
@@ -287,15 +281,15 @@ function visualizeIt(dataset, title) {
 		
 		var arc = d3.svg.arc()
 			.outerRadius(radius - 10)
-			.innerRadius(radius - (radius/2.5));
+			.innerRadius(radius - (radius/2));
 
 		var svg = d3.select("#tables")
 			.append("svg")
-			.attr("class", "svg donut1")
-			.attr("width", w)
+			.attr("class", "donut1")
+			.attr("width", w + margin.right)
 			.attr("height", h + margin.top + margin.bottom)
 			.append("g")
-			.attr("transform", "translate(" + width /2 + "," + ((height/ 2) + 50) + ")");
+			.attr("transform", "translate(" + ((width /2) + 35) +"," + ((height/ 2) + 20 ) + ")");
 		var newtitle
 		function ntitle(d){
 			console.log(d);
@@ -313,13 +307,13 @@ function visualizeIt(dataset, title) {
 		newtitle = ntitle(title);
 		console.log(newtitle)
 
-		svg.append("text")
-			.attr("width", width/ 2)
-			.attr("class", "chartTitle graphlabel")
-			.attr("text-anchor", "middle")
-			.attr("transform", "translate( 0 , -200)")
-			.style("font-family", "Lato")
-			.text(newtitle);
+		// svg.append("text")
+		// 	.attr("width", width/ 2)
+		// 	.attr("class", "chartTitle graphlabel")
+		// 	.attr("text-anchor", "middle")
+		// 	.attr("transform", "translate( 0 , -200)")
+		// 	.style("font-family", "Avenir")
+		// 	.text(newtitle);
 			
 		var g = svg.selectAll(".arc")
 			.data(pie(dataset))
@@ -357,7 +351,7 @@ function visualizeIt(dataset, title) {
 			.attr("class", "text-info2")
 			.style("text-anchor", "middle")
 			.attr("font-weight", "bold")
-			.style("font-size", radius/12+"px");
+			.style("font-size", radius/11+"px");
 
 		g.on("mouseover", function(obj){
 			console.log(obj)

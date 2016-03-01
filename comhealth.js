@@ -69,7 +69,7 @@ $(document).ready(function(){
 				left: 20,
 			}
 
-			var width = 600 - margin.left - margin.right;
+			var width = 620 - margin.left - margin.right;
 			var height = 400 - margin.top;
 			var w = width
 			var h = height
@@ -79,7 +79,7 @@ $(document).ready(function(){
 
 			var svg = d3.select("#hchart")
 				.append("svg")
-				.attr("class", "svg")
+				.attr("class", "citySvg")
 				.attr("width", w + margin.left + margin.right)
 				.attr("height", h + margin.top + margin.bottom);
 
@@ -154,15 +154,15 @@ $(document).ready(function(){
 				.attr("transform", "translate(20," + h + ")")
 				.call(xAxis)
 				.selectAll("text")
-				.style("font-family", "Lato")
+				.style("font-family", "Avenir")
 				.style("text-anchor", "middle");
 				
 
 			svg.append("text")
 				.attr("class", "chartTitle graphlabel")
 				.attr("text-anchor", "middle")
-				.attr("transform", "translate(" + ((w/2)+ 40) + ", 40)")
-				.style("font-family", "Lato")
+				.attr("transform", "translate(" + ((w/2)+ 40) + ", 36)")
+				.style("font-family", "Avenir")
 				.text("Community Health Center Distrubution");
 		};
 
@@ -185,7 +185,7 @@ $(document).ready(function(){
 
 			var svg = d3.select("#pie1")
 				.append("svg")
-				.attr("class", "svg pie1")
+				.attr("class", "citySvg pie1")
 				.attr("width", width)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
