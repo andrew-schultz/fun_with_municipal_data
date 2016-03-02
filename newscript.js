@@ -1,7 +1,5 @@
 $(document).ready(function(){
-
 	var location
-
 	var tables = [
 		"B01001", //age by sex
 		"B14001", //current enrollment by age education
@@ -9,92 +7,99 @@ $(document).ready(function(){
 		"B02001"  //race
 		];
 
-	var len = tables.length;
+	$("#map").on('click', function(){
 
-	$('#select').on('click', function(){
 		clear();
+		var location = $('#map').val();
+		// var location = String(location);
+		console.log(location);
+		var table = tables[0];
+
+		if(location == ""){
+			console.log(error);
+		} else {
+			titleIt(location, table);
+		};
 
 		$("html, body").animate({
 			scrollTop: $('#pie1').offset().top
 		}, 800);
-		
 		$("#selectedBoroughs").fadeIn(400);
 
-		var location = $("#locSelect").val();
-		var location = String(location);
-		var table = tables[0];
-		titleIt(location, table);
-
-	function titleIt(location, table, len){	
-		d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + table + "&geo_ids="+location, function(error,response) {
-			var locationN = response.geography[location]['name'];
-			console.log(locationN);
-			$('#locationName').animate({
-				left: '-25%',
-			});
-			$('#locationName').append("<h2>" + locationN + "</h2>");
-			$('#selectedBoroughs').prepend("<p id='bName'>" + locationN.toUpperCase() + "</p>");
-			
-		});
-	};
-
-
-	for(var i = 0; i < tables.length; i++){
-		var table = tables[i];
-		var location = $("#locSelect").val();
-		var location = String(location);
 		
-		// calls function that finds the location of the first table and posts it to the page
-		chartIt(location, table);
 		
-		function chartIt(location, table){
-
-
-			d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + table + "&geo_ids="+location, function(error,response) {
-		  	var data = response.data[location][table].estimate;
-		  
-			keyArray = [];
-			valueArray = [];
-			for (value in data) {
-			    if (data.hasOwnProperty(value)) {
-			        valueArray.push(data[value]); 
-			        // Push the key's value on the array
-			    }
-			}
-			// sets a variable for the titles of the graphs
-		  	var title = response.tables[table].title;
-
-		  	// sets a variable for the bar labels
-			var labels = response.tables[table].columns;
-
-		  	for (key in labels) {
-		  		// keyArray.push(labels[key]);
-		  		keyArray.push(labels[key]['name']);
-		  	}
-
-			// create an empty dataset array variable for d3
-			var dataset = [];
-
-			// loop through keyArray (array of keys) and valueArray(array of values) to create object instances
-			for(var i = 1; i < keyArray.length; i++){
-				var item = new Object();
-					item.key = keyArray[i];
-					item.value = valueArray[i];
-					dataset.push(item);
-			};
-
-			console.log(dataset);
-			// calls the function that actually builds the charts
-			visualizeIt(dataset, title);
-
+		//move the page down to the newly generated graphs, help the user out
+		
+		function titleIt(loc, t){	
+			d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + t + "&geo_ids="+loc, function(error,response) {
+				var locationN = response.geography[loc]['name'];
+				console.log(locationN);
+				$('#locationName').animate({
+					left: '-25%',
+				});
+				$('#locationName').append("<h2>" + locationN + "</h2>");
+				$('#selectedBoroughs').prepend("<p id='bName'>" + locationN.toUpperCase() + "</p>");
+				
 			});
 		};
-	};
-});
+
+
+		for(var i = 0; i < tables.length; i++){
+			var table = tables[i];
+			var location = $("#map").val();
+			var location = String(location);
+			
+			// calls function that finds the location of the first table and posts it to the page
+			chartIt(location, table);
+			
+			function chartIt(loc, t){
+
+
+				d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + t + "&geo_ids=" +loc, function(error,response) {
+			  	var data = response.data[loc][t].estimate;
+			  
+				keyArray = [];
+				valueArray = [];
+				for (value in data) {
+				    if (data.hasOwnProperty(value)) {
+				        valueArray.push(data[value]); 
+				        // Push the key's value on the array
+				    }
+				}
+				// sets a variable for the titles of the graphs
+			  	var title = response.tables[t].title;
+
+			  	// sets a variable for the bar labels
+				var labels = response.tables[t].columns;
+
+			  	for (key in labels) {
+			  		// keyArray.push(labels[key]);
+			  		keyArray.push(labels[key]['name']);
+			  	}
+
+				// create an empty dataset array variable for d3
+				var dataset = [];
+
+				// loop through keyArray (array of keys) and valueArray(array of values) to create object instances
+				for(var i = 1; i < keyArray.length; i++){
+					var item = new Object();
+						item.key = keyArray[i];
+						item.value = valueArray[i];
+						dataset.push(item);
+				};
+
+				console.log(dataset);
+				// calls the function that actually builds the charts
+				visualizeIt(dataset, title);
+
+				});
+			};
+		};
+	});
 // this function constructs the charts
-function visualizeIt(dataset, title) {
+function visualizeIt(ds, ti) {
 	// set a variable the longest chart column label, to be used for defining the length of the area alloted for labels
-	var bot = d3.max(dataset, function(d) {return d.key.length; } );
+	var bot = d3.max(ds, function(d) {return d.key.length; } );
 
 	// sets the margins for the svg
 	var margin = {
@@ -119,7 +124,7 @@ function visualizeIt(dataset, title) {
 		
 	//Define the X scale
 	var xScale = d3.scale.ordinal()
-		.domain(dataset.map(function (d){return d.key;}))
+		.domain(ds.map(function (d){return d.key;}))
 		.rangeRoundBands([margin.left, (w - margin.left)], 0.05);
 
 	//Define the X Axis
@@ -129,7 +134,7 @@ function visualizeIt(dataset, title) {
 
 	//Define the Y Scale
 	var yScale = d3.scale.linear()
-		.domain([0, d3.max(dataset, function(d) {return d.value; } )])
+		.domain([0, d3.max(ds, function(d) {return d.value; } )])
 		.range([h, margin.top]);
 
 	//Define the Y Axis
@@ -138,7 +143,7 @@ function visualizeIt(dataset, title) {
 		.orient("left");
 
 	// creates bars
-	bars = svg.selectAll("rect").data(dataset);
+	bars = svg.selectAll("rect").data(ds);
 	
 	// add new bars
 	bars.enter()
@@ -170,7 +175,7 @@ function visualizeIt(dataset, title) {
 			.attr("x", xPos)
 			.attr("y", function(){
 				// if the bar is very small, diplay the tooltip above it instead of trying to cram it inside
-				var x = d3.max(dataset, function(d) { return d.value; });
+				var x = d3.max(ds, function(d) { return d.value; });
 				if (d.value < 0.1 * x) {
 					return yPos - 22;
 				} else {
@@ -181,7 +186,7 @@ function visualizeIt(dataset, title) {
 			.style("font-family", "Avenir")
 			.attr("fill", function(){
 				// change the color of the info based on where it's going to be displayed(if the value is small, make it a darker color since it'll be on the white background)
-				var x = d3.max(dataset, function(d) { return d.value; });
+				var x = d3.max(ds, function(d) { return d.value; });
 				if (d.value < 0.1 * x) {
 					return "#2B3E42";
 				} else {
@@ -229,12 +234,6 @@ function visualizeIt(dataset, title) {
 			}
 		});
 
-	// draw the Y axis
-	// svg.append("g")
-	// 	.attr("class", "yaxis")
-	// 	.attr("transform", "translate(" + margin.left + ",0)")
-	// 	.call(yAxis);
-
 	// add the X axis label
 	svg.append("text")
 		.attr("class", "xaxislabel graphlabel")
@@ -255,12 +254,12 @@ function visualizeIt(dataset, title) {
 		.attr("text-anchor", "middle")
 		.attr("transform", "translate(" + ((w/2)+ 215) + ", 20)")
 		.style("font-family", "Avenir")
-		.text(title.toUpperCase());
+		.text(ti.toUpperCase());
 
-		donutIt(dataset, title);
+		donutIt(ds, ti);
 }
 
-	function donutIt(dataset, title){
+	function donutIt(ds, ti){
 
 		var margin = {
 		top: 50, 
@@ -300,7 +299,7 @@ function visualizeIt(dataset, title) {
 			.attr("transform", "translate(" + ((width /2) + 35) +"," + ((height/ 2) + 20 ) + ")");
 		var newtitle
 		function ntitle(d){
-			console.log(d);
+			// console.log(d);
 			if(d.length > 35){
 				var s = d.substr(29, 37);
 				var v = s.replace(/\s/, "\n");
@@ -308,12 +307,12 @@ function visualizeIt(dataset, title) {
 				// console.log(ntitle);
 				return Ttitle;
 			} else {
-				return title;
+				return ti;
 			};
 		};
 
-		newtitle = ntitle(title);
-		console.log(newtitle)
+		newtitle = ntitle(ti);
+		// console.log(newtitle)
 
 		// svg.append("text")
 		// 	.attr("width", width/ 2)
@@ -324,7 +323,7 @@ function visualizeIt(dataset, title) {
 		// 	.text(newtitle);
 			
 		var g = svg.selectAll(".arc")
-			.data(pie(dataset))
+			.data(pie(ds))
 			.enter()
 			.append("g")
 			.attr("class", "arc");
@@ -335,16 +334,8 @@ function visualizeIt(dataset, title) {
 			.attr("d", arc)
 			.style("fill", function(d) { return color(d.data.key); });
 
-		// g.append("text")
-		// 	.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
-		// 	.attr("dy", ".35em")
-		// 	.style("text-anchor", "middle");
-
-		// g.select("text")
-		// 	.text(function(d) { return d.data.key; });
-
 		svg.append("text")
-			.datum(dataset.key)
+			.datum(ds.key)
 			.attr("x", 0)
 			.attr("y", 0 + radius/30)
 			.attr("class", "text-info1")
@@ -353,7 +344,7 @@ function visualizeIt(dataset, title) {
 			.style("font-size", radius/10+"px");
 
 		svg.append("text")
-			.datum(dataset.key)
+			.datum(ds.key)
 			.attr("x", 0)
 			.attr("y", 0 + radius/8)
 			.attr("class", "text-info2")
@@ -362,7 +353,7 @@ function visualizeIt(dataset, title) {
 			.style("font-size", radius/11+"px");
 
 		g.on("mouseover", function(obj){
-			console.log(obj)
+			// console.log(obj)
 			svg.select("text.text-info1")
 				.attr("fill", "#000000")
 				.text(function(d){
@@ -382,40 +373,6 @@ function visualizeIt(dataset, title) {
 			svg.select("text.text-info1").text("");
 			svg.select("text.text-info2").text("");
 		});
-
-		
-		
-
-
-		// svg.append("g")
-		// 	.attr("class", "table_title")
-		// 	.append("text")
-		// 	.attr("transform", "translate(0, 50)")
-		// 	.text(title);
-			
-		// svg.append("g")
-		// 	.attr("width", width / 2)
-		// 	.attr("height", h - margin.top - margin.bottom)
-		// 	.attr("fill", "red")
-		// 	.attr("class", "col1")
-		// 	.append("ul")
-		// 	.attr("class", "ul1")
-		// 	.append("li")
-		// 	.append("text");
-			
-
-
-			// .text(dataset.map(function (d){return d.key;}));
-		
-			// for(var i = 0; i < dataset.length; i++){
-			// 	$(".ul1").append("<li>" + dataset[i].key + "</li>");
-			// };
-		
-
-		// svg.append("g")
-		// 	.attr('class', "col2")
-		// 	.append("ul")
-		// 	.attr("class", "ul2");
 
 	}
 

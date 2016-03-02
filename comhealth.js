@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-	$('#select').on('click', function(){
+	$('#map').on('click', function(){
 
 	
 		d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){

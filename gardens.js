@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-	$('#select').on('click', function(){
+	$('#map').on('click', function(){
 
 		$('#pie1').delay(450).animate({
 			left: '55.25%',
