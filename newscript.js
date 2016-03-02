@@ -1,5 +1,5 @@
-$(document).ready(function(){
-	var location
+// $(document).ready(function(){
+	var locat = $('#map').val();
 	var tables = [
 		"B01001", //age by sex
 		"B14001", //current enrollment by age education
@@ -7,29 +7,35 @@ $(document).ready(function(){
 		"B02001"  //race
 		];
 
-	$("#map").on('click', function(){
+console.log(locat)
 
-		clear();
+	$("#map").on('click', function(){
+		console.log(thing);
+
+		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();
-		// var location = String(location);
+		// console.log(thing);
 		console.log(location);
+		startIt(location);
+	 });
+	function startIt(loc){
+		if(loc == ""){
+			console.log('error');
+		} else {
+		// clears off the old graphs so we don't get duplicates
+		clear();
+
+		var location = loc
+		// define a variable for the tables loop
 		var table = tables[0];
 
-		if(location == ""){
+		//checks to see if a value has been assigned to the location variable
+		if(location == null){
 			console.log(error);
 		} else {
 			titleIt(location, table);
 		};
-
-		$("html, body").animate({
-			scrollTop: $('#pie1').offset().top
-		}, 800);
-		$("#selectedBoroughs").fadeIn(400);
-
-		
-		
-		//move the page down to the newly generated graphs, help the user out
-		
+	
 		function titleIt(loc, t){	
 			d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + t + "&geo_ids="+loc, function(error,response) {
 				var locationN = response.geography[loc]['name'];
@@ -42,8 +48,6 @@ $(document).ready(function(){
 				
 			});
 		};
-
-
 		for(var i = 0; i < tables.length; i++){
 			var table = tables[i];
 			var location = $("#map").val();
@@ -54,7 +58,7 @@ $(document).ready(function(){
 			
 			function chartIt(loc, t){
 
-
+				// queries the census api with the current location and table
 				d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + t + "&geo_ids=" +loc, function(error,response) {
 			  	var data = response.data[loc][t].estimate;
 			  
@@ -73,7 +77,6 @@ $(document).ready(function(){
 				var labels = response.tables[t].columns;
 
 			  	for (key in labels) {
-			  		// keyArray.push(labels[key]);
 			  		keyArray.push(labels[key]['name']);
 			  	}
 
@@ -95,7 +98,8 @@ $(document).ready(function(){
 				});
 			};
 		};
-	});
+	};	
+};
 // this function constructs the charts
 function visualizeIt(ds, ti) {
 	// set a variable the longest chart column label, to be used for defining the length of the area alloted for labels
@@ -226,6 +230,7 @@ function visualizeIt(ds, ti) {
 		.attr("dx", "-.8em")
 		.attr("dy", ".15em")
 		.attr("transform", "rotate(-65)")
+		// if the label is over 15 characters long, take the first 15 characters and add a '...' 
 		.text(function(d){
 			if(d.length > 15){
 				return d.substr(0, 15) + "...";
@@ -256,6 +261,7 @@ function visualizeIt(ds, ti) {
 		.style("font-family", "Avenir")
 		.text(ti.toUpperCase());
 
+		// take the current data being passed for dataset and title and give it to the donut creation function
 		donutIt(ds, ti);
 }
 
@@ -275,7 +281,7 @@ function visualizeIt(ds, ti) {
 
 		var radius = Math.min(width, height) / 2;
 
-		var currentVal;
+		// var currentVal;
 
 		var color = d3.scale.ordinal()
 			.range(["#F6776A", "#024E83", "#97DCDD", "#DC4032", "#78C652"]);
@@ -383,6 +389,6 @@ function visualizeIt(ds, ti) {
 		$(".pieSideDiv").remove();
 		$("#bName").remove();
 	};
-});
+// });
 
 			

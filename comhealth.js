@@ -1,7 +1,18 @@
 $(document).ready(function(){
 
 	$('#map').on('click', function(){
+		console.log(thing);
 
+		// this should grab the location id of the selected borough from the map
+		var location = $('#map').val();
+		// console.log(thing);
+		console.log(location);
+		startIt(location);
+	 });
+	function startIt(loc){
+		if(loc == ""){
+			console.log('error');
+		} else {
 	
 		d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
 			var comHealth = response;
@@ -60,6 +71,7 @@ $(document).ready(function(){
 			chartIt(data);
 			pieIt(data);
 		});
+	};
 
 		function chartIt(data){
 			var margin = {
@@ -254,7 +266,7 @@ $(document).ready(function(){
 					return d;
 				};
 			};
-		});
+		};
 	});
 
 	

@@ -1,6 +1,18 @@
 $(document).ready(function(){
 
 	$('#map').on('click', function(){
+		console.log(thing);
+
+		// this should grab the location id of the selected borough from the map
+		var location = $('#map').val();
+		// console.log(thing);
+		console.log(location);
+		startIt(location);
+	 });
+	function startIt(loc){
+		if(loc == ""){
+			console.log('error');
+		} else {
 
 		$('#pie1').delay(450).animate({
 			left: '55.25%',
@@ -17,6 +29,12 @@ $(document).ready(function(){
 		$('#pie2').delay(600).animate({
 			right: '-56.75%',
 		});
+
+		//move the page down to the newly generated graphs, help the user out		
+		$("html, body").animate({
+			scrollTop: $('#pie1').offset().top
+		}, 800);
+		$("#selectedBoroughs").fadeIn(400);
 
 
 
@@ -79,6 +97,7 @@ $(document).ready(function(){
 			chartIt(data);
 			pieIt(data);
 		});
+	};
 
 		function chartIt(data){
 			var margin = {
@@ -274,5 +293,5 @@ $(document).ready(function(){
 					return d;
 				};
 		};
-	});
+	};
 });

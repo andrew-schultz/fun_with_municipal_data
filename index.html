@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+	<meta charset="UTF-8">
 	<title>d3 fun</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -8,13 +9,13 @@
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.3/mapbox-gl.css' rel='stylesheet' />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<script src="newscript.js"></script>
+	
 	<script src="comhealth.js"></script>
 	<script src="gardens.js"></script>
 </head>
 <body>
 	<div id="header">
-		<p></p>
+		<p id="pageTitle"></p>
 		<nav>
 		</nav>
 	</div>
@@ -22,105 +23,6 @@
 		<div id="map">
 		</div>
 	</div>
-	<script type="text/javascript">
-	$(document).ready(function(){
-		mapboxgl.accessToken = 'pk.eyJ1IjoiYXMxNzMxNzEiLCJhIjoiY2lsNDR6bWdwM3cxb3Z5bTNvbmtmeTJsbiJ9.16HxpvRVaoKgLOBG9L-Quw';
-
-		var map = new mapboxgl.Map({
-	    	container: 'map', // container id
-	    	style: 'mapbox://styles/as173171/cila7x59q007a9gkklp42kdr6', //hosted style id
-	   		center: [-73.977800, 40.715824], // starting position
-	   		zoom: 10, // starting zoom
-		});
-
-
-		map.on('style.load', function(){
-			map.addSource('boroughs', {
-				'type': 'vector',
-				'url': 'mapbox://as173171.8smtgeas'
-			});
-
-			map.addLayer({
-				"id": "boroughs",
-				"type": "fill",
-				"source-layer": "boroughs",
-				"source": "boroughs",
-				"interactive": true,
-				"layout": {},
-				"paint": {
-					"fill-color": "#2B3E42",
-					"fill-opacity": 0.5,
-					"fill-outline-color": "#26244d"
-				}
-			});
-
-			map.addLayer({
-				"id": "route-hover",
-				"type": "fill",
-				"source": "boroughs",
-				"source-layer":"boroughs",
-				"layout": {},
-				"paint": {
-					"fill-color": "#2B3E42",
-					"fill-opacity": 0.8,
-					"fill-outline-color": "#26244d"
-				},
-				"filter": ["==", "BoroCode", ""]
-			});
-			map.on('click', function(e) {
-				map.featuresAt(e.point, {
-					radius: 1,
-					includeGeometry: true,
-					layer: ['boroughs'],
-				}, function (err, features) {
-					if (err || !features.length) {
-						return;
-					}
-					var feature = features[0];
-					var id = feature.properties.BoroId;
-					document.getElementById("map").value = id;
-					console.log(document.getElementById("map").value);
-					map.panTo(map.unproject(e.point));
-				});
-			});
-			map.on("mousemove", function(e) {
-				map.featuresAt(e.point, {
-					radius: 5,
-					layers: ["boroughs-fill"]
-				}, function (err, features){
-					if (!err && features.length) {
-						map.setFilter("route-hover", ["==", "BoroCode", features[0].properties.BoroCode]);
-					} else {
-						return;
-					}
-				});
-			});
-			// disable zooming on scroll, makes it easier to navigate around the page without accidentally zooming way out or way in
-			map.scrollZoom.disable();
-			map.doubleClickZoom.disable();
-
-			var popup = new mapboxgl.Popup();
-
-			map.on('mousemove', function (e) {
-				map.featuresAt(e.point, {
-					radius: 1, 
-					includeGeometry: true,
-					layer: ['boroughs'],
-				}, function (err, features) {
-					if (err || !features.length) {
-						popup.remove();
-						return;
-					}
-					var feature = features[0];
-					// map.unproject(e.point) translates the pixel position of the point of the mouse into lat and long
-					popup.setLngLat(map.unproject(e.point))
-						.setHTML(feature.properties.BoroName)
-						.addTo(map);
-				});
-			});
-		});
-	});
-	</script>
 	<div id="locationName">
 		<h2>Select a Borough</h2>
 	</div>
@@ -142,6 +44,119 @@
 	</div>
 	<div id="footer">
 	</div>
+	<script type="text/javascript">
+	var thing;
+	// $(document).ready(function(){
+		mapboxgl.accessToken = 'pk.eyJ1IjoiYXMxNzMxNzEiLCJhIjoiY2lsNDR6bWdwM3cxb3Z5bTNvbmtmeTJsbiJ9.16HxpvRVaoKgLOBG9L-Quw';
+
+		// generates a new map
+		var map = new mapboxgl.Map({
+	    	// container id
+	    	container: 'map',
+	    	//hosted style id
+	    	style: 'mapbox://styles/as173171/cila7x59q007a9gkklp42kdr6',
+	    	// starting position
+	   		center: [-73.977800, 40.715824],
+	   		// starting zoom
+	   		zoom: 10,
+		});
+
+
+		map.on('style.load', function(){
+			// loads in the mapbox tile/geojson dataset for use in layers
+			map.addSource('boroughs', {
+				'type': 'vector',
+				'url': 'mapbox://as173171.8smtgeas'
+			});
+			// adds the outline of the boroughs to the map
+			map.addLayer({
+				"id": "boroughs",
+				"type": "fill",
+				"source-layer": "boroughs",
+				"source": "boroughs",
+				"interactive": true,
+				"layout": {},
+				"paint": {
+					"fill-color": "#2B3E42",
+					"fill-opacity": 0.5,
+					"fill-outline-color": "#26244d"
+				}
+			});
+			// adds a layer to the map that is triggered on hover, it changes the color a little bit to signify that selection
+			map.addLayer({
+				"id": "route-hover",
+				"type": "fill",
+				"source": "boroughs",
+				"source-layer":"boroughs",
+				"layout": {},
+				"paint": {
+					"fill-color": "#2B3E42",
+					"fill-opacity": 0.8,
+					"fill-outline-color": "#26244d"
+				},
+				"filter": ["==", "BoroCode", ""]
+			});
+			// this function looks to see which borough you clicked on and assigns the BoroId property from the geojson file to a variable and to a value of #map
+			map.on('click', function(e) {
+				map.featuresAt(e.point, {
+					radius: 1,
+					includeGeometry: true,
+					layer: ['boroughs'],
+				}, function (err, features) {
+					if (err || !features.length) {
+						return;
+					}
+					var feature = features[0];
+					var id = feature.properties.BoroId;
+					document.getElementById("map").value = id;
+					thing = document.getElementById("map").value;
+					console.log(thing)
+					console.log(document.getElementById("map").value);
+					map.panTo(map.unproject(e.point));
+				});
+			});
+			map.on("mousemove", function(e) {
+				map.featuresAt(e.point, {
+					radius: 5,
+					layers: ["boroughs-fill"]
+				}, function (err, features){
+					if (!err && features.length) {
+						map.setFilter("route-hover", ["==", "BoroCode", features[0].properties.BoroCode]);
+					} else {
+						return;
+					}
+				});
+			});
+			// disable zooming on scroll, makes it easier to navigate around the page without accidentally zooming way out or way in
+			map.scrollZoom.disable();
+			// disables zooming on a double click
+			map.doubleClickZoom.disable();
+
+			// defines a variable and generates a popup
+			var popup = new mapboxgl.Popup();
+
+			// this function tracks the mouse pointers movement over the map and generates a popup with the name of the borough at the point of the mouse
+			map.on('mousemove', function (e) {
+				map.featuresAt(e.point, {
+					radius: 1, 
+					includeGeometry: true,
+					layer: ['boroughs'],
+				}, function (err, features) {
+					if (err || !features.length) {
+						popup.remove();
+						return;
+					}
+					var feature = features[0];
+					// map.unproject(e.point) translates the pixel position of the point of the mouse into lat and long
+					popup.setLngLat(map.unproject(e.point))
+						.setHTML(feature.properties.BoroName)
+						.addTo(map);
+				});
+			});
+		});
+	// });
+	</script>
+	<script type="text/javascript" src="newscript.js"></script>
 </body>
 </html>
 
