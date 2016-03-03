@@ -316,7 +316,8 @@ rect:hover {
 }
 
 #footer {
-	height: 65px;
+	height: 40px;
 	width: 100%;
+	display: none;
 }
 

@@ -20,6 +20,7 @@ $(document).ready(function(){
 			$("#selectedBoroughs").fadeIn(400);
 			$("#healthCenters").fadeIn(400);
 			$("#communityGardens").fadeIn(400);
+			$("#footer").fadeIn(400);
 			
 			//move the page down to the newly generated graphs, help the user out		
 			$("html, body").delay(500).animate({
