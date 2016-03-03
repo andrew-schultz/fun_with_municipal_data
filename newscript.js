@@ -93,12 +93,17 @@
 				console.log(dataset);
 				// calls the function that actually builds the charts
 				visualizeIt(dataset, title);
-
+				mathIt(dataset, title);
 				});
 			};
 		};
 	};	
 };
+
+function mathIt(ds, ti){
+	console.log(ds);
+};
+
 // this function constructs the charts
 function visualizeIt(ds, ti) {
 	// set a variable the longest chart column label, to be used for defining the length of the area alloted for labels

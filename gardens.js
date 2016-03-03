@@ -1,7 +1,12 @@
 $(document).ready(function(){
 
-	$('#map').on('click', function(){
+	$('#up').on('click', function(){
+		$('html, body').animate({
+			scrollTop: $('#header').offset().top
+		}, 1250);
+	});
 
+	$('#map').on('click', function(){
 		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();
 		// console.log(thing);
@@ -98,111 +103,111 @@ $(document).ready(function(){
 		});
 	};
 
-		function chartIt(data){
-			var margin = {
-				top: 30,
-				right: 40,
-				bottom: 20,
-				left: 20,
-			}
+	function chartIt(data){
+		var margin = {
+			top: 30,
+			right: 40,
+			bottom: 20,
+			left: 20,
+		}
 
-			var width = 620 - margin.left - margin.right;
-			var height = 400 - margin.top;
-			var w = width
-			var h = height
+		var width = 620 - margin.left - margin.right;
+		var height = 400 - margin.top;
+		var w = width
+		var h = height
 
-			var color = d3.scale.ordinal()
-				.range(["#F6776A", "#024E83", "#97DCDD", "#DC4032", "#78C652"]);
+		var color = d3.scale.ordinal()
+			.range(["#F6776A", "#024E83", "#97DCDD", "#DC4032", "#78C652"]);
 
-			var svg = d3.select("#gchart")
-				.append("svg")
-				.attr("class", "citySvg")
-				.attr("width", w + margin.left + margin.right)
-				.attr("height", h + margin.top + margin.bottom);
+		var svg = d3.select("#gchart")
+			.append("svg")
+			.attr("class", "citySvg")
+			.attr("width", w + margin.left + margin.right)
+			.attr("height", h + margin.top + margin.bottom);
 
-			var xScale = d3.scale.ordinal()
-				.domain(data.map(function (d){ return d.key;}))
-				.rangeRoundBands([margin.left, w], 0.05);
+		var xScale = d3.scale.ordinal()
+			.domain(data.map(function (d){ return d.key;}))
+			.rangeRoundBands([margin.left, w], 0.05);
 
-			var xAxis = d3.svg.axis()
-				.scale(xScale)
-				.orient("bottom");
+		var xAxis = d3.svg.axis()
+			.scale(xScale)
+			.orient("bottom");
 
-			var yScale = d3.scale.linear()
-				.domain([0, d3.max(data, function(d) { return d.value; } )])
-				.range([h, (margin.top + 40)]);
+		var yScale = d3.scale.linear()
+			.domain([0, d3.max(data, function(d) { return d.value; } )])
+			.range([h, (margin.top + 40)]);
 
-			var yAxis = d3.svg.axis()
-				.scale(yScale)
-				.orient("left");
+		var yAxis = d3.svg.axis()
+			.scale(yScale)
+			.orient("left");
 
-			bars = svg.selectAll("rect").data(data);
+		bars = svg.selectAll("rect").data(data);
 
-			bars.enter()
-				.append("rect")
-				.attr("x", function(d, i) {
-					return xScale(d.key);
-				})
-				.attr("y", function(d) {
-					return yScale(d.value);
-				})
-				.attr("width", xScale.rangeBand())
-				.attr("height", function(d) {
-					return h - yScale(d.value);
-				})
-				.attr("transform", "translate(20, 0)")
-				.attr("fill", function(d) { return color(d.key); });
-
-			bars.on("mouseover", function(d) {
-				svg.append("text")
-					.attr("id", "info");
-
-				var xPos = parseFloat(d3.select(this).attr("x")) + (xScale.rangeBand()/2 + 20);
-				var yPos = parseFloat(d3.select(this).attr("y")) + 18;
-
-				svg.select("#info")
-					.attr("x", xPos)
-					.attr("y", function(){
-						var x = d3.max(data, function(d) { return d.value; });
-						if (d.value < 0.1 * x) {
-							return yPos - 22;
-						} else {
-							return yPos;
-						};
-					})
-					.attr("text-anchor", "middle")
-					.attr("fill", function(){
-						var x = d3.max(data, function(d){ return d.value; });
-						if (d.value < 0.1 * x) {
-							return "#2B3E42";
-						} else {
-							return "#2B3E42";
-						};
-					})
-					.attr("font-size", "18px")
-					.text(d.value);
+		bars.enter()
+			.append("rect")
+			.attr("x", function(d, i) {
+				return xScale(d.key);
 			})
-			.on("mouseout", function(){
-				d3.select("#info").remove();
-			});
+			.attr("y", function(d) {
+				return yScale(d.value);
+			})
+			.attr("width", xScale.rangeBand())
+			.attr("height", function(d) {
+				return h - yScale(d.value);
+			})
+			.attr("transform", "translate(20, 0)")
+			.attr("fill", function(d) { return color(d.key); });
 
-			svg.append("g")
-				.attr("class", "xaxis")
-				.attr("transform", "translate(20," + h + ")")
-				.call(xAxis)
-				.selectAll("text")
-				.style("font-size", "17px")
-				.style("font-family", "Avenir")
-				.style("text-anchor", "middle");
-				
-
+		bars.on("mouseover", function(d) {
 			svg.append("text")
-				.attr("class", "chartTitle graphlabel")
+				.attr("id", "info");
+
+			var xPos = parseFloat(d3.select(this).attr("x")) + (xScale.rangeBand()/2 + 20);
+			var yPos = parseFloat(d3.select(this).attr("y")) + 18;
+
+			svg.select("#info")
+				.attr("x", xPos)
+				.attr("y", function(){
+					var x = d3.max(data, function(d) { return d.value; });
+					if (d.value < 0.1 * x) {
+						return yPos - 22;
+					} else {
+						return yPos;
+					};
+				})
 				.attr("text-anchor", "middle")
-				.attr("transform", "translate(" + ((w/2)+ 40) + ", 36)")
-				.style("font-family", "Avenir")
-				.text("'GreenThumb' Community Garden Distrubution");
-		};
+				.attr("fill", function(){
+					var x = d3.max(data, function(d){ return d.value; });
+					if (d.value < 0.1 * x) {
+						return "#2B3E42";
+					} else {
+						return "#2B3E42";
+					};
+				})
+				.attr("font-size", "18px")
+				.text(d.value);
+		})
+		.on("mouseout", function(){
+			d3.select("#info").remove();
+		});
+
+		svg.append("g")
+			.attr("class", "xaxis")
+			.attr("transform", "translate(20," + h + ")")
+			.call(xAxis)
+			.selectAll("text")
+			.style("font-size", "17px")
+			.style("font-family", "Avenir")
+			.style("text-anchor", "middle");
+			
+
+		svg.append("text")
+			.attr("class", "chartTitle graphlabel")
+			.attr("text-anchor", "middle")
+			.attr("transform", "translate(" + ((w/2)+ 40) + ", 36)")
+			.style("font-family", "Avenir")
+			.text("'GreenThumb' Community Garden Distrubution");
+	};
 
 		function pieIt(data){
 
@@ -275,7 +280,7 @@ $(document).ready(function(){
 				.style("fill", function(d) { return color(d.data.key); });
 
 			g.append("text")
-				.attr("transform", function(d) { return "translate(" + labelArc.centroid(d) + ")"; })
+				.attr("transform", function(d) { return "translate(" + labelArc.centroid(d)+")"; })
 				.attr("dy", ".35em")
 				.text(function(d) { return d.data.percent; })
 				.style("text-anchor", "middle")
