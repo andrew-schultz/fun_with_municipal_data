@@ -1,77 +1,78 @@
 $(document).ready(function(){
 
 	$('#map').on('click', function(){
-		console.log(thing);
-
 		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();
 		// console.log(thing);
 		console.log(location);
 		startIt(location);
-	 });
+	});
+
 	function startIt(loc){
 		if(loc == ""){
 			console.log('error');
 		} else {
 	
-		d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
-			var comHealth = response;
-			var boroughs = []
-			for (value in comHealth){
-				boroughs.push(comHealth[value]['__name_of_borough']);
-			};
-			var bk = 0;
-			var bx = 0;
-			var si = 0;
-			var m = 0;
-			var q = 0;
-			var bvals = [];
-			for(i in boroughs){
-				if(boroughs[i] == "Brooklyn"){
-					bk += 1
-				} else if (boroughs[i] == "Bronx"){
-					bx += 1
-				} else if (boroughs[i] == "Queens"){
-					q += 1
-				} else if (boroughs[i] == "Manhattan"){
-					m += 1
-				} else {
-					si += 1
+			d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
+				var comHealth = response;
+				var boroughs = []
+				for (value in comHealth){
+					boroughs.push(comHealth[value]['__name_of_borough']);
+				};
+				var bk = 0;
+				var bx = 0;
+				var si = 0;
+				var m = 0;
+				var q = 0;
+				var bvals = [];
+				for(i in boroughs){
+					if(boroughs[i] == "Brooklyn"){
+						bk += 1
+					} else if (boroughs[i] == "Bronx"){
+						bx += 1
+					} else if (boroughs[i] == "Queens"){
+						q += 1
+					} else if (boroughs[i] == "Manhattan"){
+						m += 1
+					} else {
+						si += 1
+					};
+					
 				};
 				
-			};
-		
-			bvals.push(bx);
-			bvals.push(bk);
-			bvals.push(m);
-			bvals.push(q);
-			bvals.push(si);
+				bvals.push(bx);
+				bvals.push(bk);
+				bvals.push(m);
+				bvals.push(q);
+				bvals.push(si);
 
 
-			var percent = [];
-			for( i in bvals){
-				percent.push(((bvals[i] / boroughs.length) * 100).toFixed(2) + "%");
-			};
+				var percent = [];
+				for( i in bvals){
+					percent.push(((bvals[i] / boroughs.length) * 100).toFixed(2) + "%");
+				};
 
-			console.log(percent);
+				console.log(percent);
 
-			// this block filters out all of the duplicates in the boroughs array, leaving us with just the 5 boroughs
-			var bor = boroughs.filter(function(x, i){
-				return boroughs.indexOf(x) == i;
+				// this block filters out all of the duplicates in the boroughs array, leaving us with just the 5 boroughs
+				var bor = boroughs.filter(function(x, i){
+					return boroughs.indexOf(x) == i;
+				});
+
+				var data = [];
+
+				for(var i = 0; i < bor.length; i++){
+					var item = new Object();
+						item.key = bor[i];
+						item.value = bvals[i];
+						item.percent = percent[i];
+						data.push(item);
+				};
+
+				chartIt(data);
+				pieIt(data);
 			});
-
-			var data = [];
-			for(var i = 0; i < bor.length; i++){
-				var item = new Object();
-					item.key = bor[i];
-					item.value = bvals[i];
-					item.percent = percent[i];
-					data.push(item);
-			};
-			chartIt(data);
-			pieIt(data);
-		});
-	};
+		};
 
 		function chartIt(data){
 			var margin = {
@@ -94,6 +95,7 @@ $(document).ready(function(){
 				.attr("class", "citySvg")
 				.attr("width", w + margin.left + margin.right)
 				.attr("height", h + margin.top + margin.bottom);
+				// .attr("transform", "translate( 0, " + 100 +")");
 
 			var xScale = d3.scale.ordinal()
 				.domain(data.map(function (d){ return d.key;}))
@@ -176,7 +178,7 @@ $(document).ready(function(){
 				.attr("text-anchor", "middle")
 				.attr("transform", "translate(" + ((w/2)+ 40) + ", 36)")
 				.style("font-family", "Avenir")
-				.text("Community Health Center Distrubution");
+				.text("Distrubution Across Boroughs");
 		};
 
 		function pieIt(data){
@@ -202,7 +204,7 @@ $(document).ready(function(){
 				.attr("width", width)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
-				.attr("transform", "translate(" + width / 2 + "," + ((height / 2) + 50) + ")");
+				.attr("transform", "translate(" + width / 2 + "," + ((height / 2) + 60) + ")");
 
 			var arc = d3.svg.arc()
 				.outerRadius(radius - 10)
@@ -259,7 +261,7 @@ $(document).ready(function(){
 				.attr("class", "pietitle")
 				.attr("text-anchor", "middle")
 				.attr("transform", "translate( 0 , -200)")
-				.text("Community Health Center Distrubution by Percent");
+				.text("Distrubution by Percent");
 
 				function type(d) {
 					d.value = +d.value;

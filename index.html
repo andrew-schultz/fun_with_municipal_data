@@ -9,20 +9,13 @@
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.14.3/mapbox-gl.css' rel='stylesheet' />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	
 	<script src="comhealth.js"></script>
 	<script src="gardens.js"></script>
-	
 </head>
 <body>
 	<div id="header">
 		<p id="pageTitle">Fun With Municipal Data</p>
 		<nav>
-			<ul>
-				<li>
-					<!-- RESULTS -->
-				</li>
-			</ul>
 		</nav>
 	</div>
 	<div id="map_container">
@@ -32,26 +25,37 @@
 	<div id="locationName">
 		<h2>Select a Borough</h2>
 	</div>
-	<div id="healthCenters">
-		<div id="pie1" class="overall"></div>
-		<div id="hchart" class="overall"></div>
-	</div>
-	<div id="communityGardens">
-		<div id="gchart" class="overall"></div>
-		<div id="pie2" class="overall">
-			<div class="hidden_results">
-				Overall, Brooklyn is just the best.
-			</div>
-		</div>
-	</div>
 	<div id="selectedBoroughs">
 		<div id="graph"></div>
 		<div id="tables"></div>
-		<div id="back">
-		<p id ="up">- back to map -</p>
+		<div class="back">
+			<p class ="up">- back to map -</p>
+		</div>
 	</div>
+	<div id="healthCenters">
+		<div class="cityTitle">
+			<p class="cityTitleP">
+				Community Health Centers
+			</p>
+		</div>
+		<div id="pie1" class="overall"></div>
+		<div id="hchart" class="overall"></div>
+		<div class="back">
+			<p class="up">- back to map -</p>
+		</div>
 	</div>
-	
+	<div id="communityGardens">
+		<div class="cityTitle">
+			<p class="cityTitleP">
+				'GreenThumb' Community Gardens
+			</p>
+		</div>
+		<div id="gchart" class="overall"></div>
+		<div id="pie2" class="overall"></div>
+		<div class="back">
+			<p class="up">- back to map -</p>
+		</div>
+	</div>
 	<div id="footer">
 	</div>
 	<script type="text/javascript">
