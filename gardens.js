@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
 	$('#map').on('click', function(){
-		console.log(thing);
 
 		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();
@@ -31,7 +30,7 @@ $(document).ready(function(){
 		});
 
 		//move the page down to the newly generated graphs, help the user out		
-		$("html, body").animate({
+		$("html, body").delay(500).animate({
 			scrollTop: $('#pie1').offset().top
 		}, 800);
 		$("#selectedBoroughs").fadeIn(400);

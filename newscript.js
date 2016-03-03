@@ -1,5 +1,5 @@
 // $(document).ready(function(){
-	var locat = $('#map').val();
+	// var locat = $('#map').val();
 	var tables = [
 		"B01001", //age by sex
 		"B14001", //current enrollment by age education
@@ -7,10 +7,9 @@
 		"B02001"  //race
 		];
 
-console.log(locat)
+// console.log(locat)
 
 	$("#map").on('click', function(){
-		console.log(thing);
 
 		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();

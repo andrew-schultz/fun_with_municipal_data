@@ -62,6 +62,10 @@ body {
 	position: relative;
 }
 
+#hackyfix {
+	display: none;
+}
+
 #hchart {
 	border-radius: 10px;
 	display: inline-block;
