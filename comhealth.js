@@ -12,19 +12,26 @@ $(document).ready(function(){
 		if(loc == ""){
 			console.log('error');
 		} else {
-	
+			// queries the socrata(nyc) api 
 			d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
+				// sets the api response equal to a variable
 				var comHealth = response;
 				var boroughs = []
+
+				// loops through the api response and pushes the values '__name_of_borough' to an array
 				for (value in comHealth){
 					boroughs.push(comHealth[value]['__name_of_borough']);
 				};
+
+				// had to set up some helper variables for working with the data
 				var bk = 0;
 				var bx = 0;
 				var si = 0;
 				var m = 0;
 				var q = 0;
 				var bvals = [];
+
+				// loops through boroughs array, counts up each mention of a borough
 				for(i in boroughs){
 					if(boroughs[i] == "Brooklyn"){
 						bk += 1
@@ -40,19 +47,19 @@ $(document).ready(function(){
 					
 				};
 				
+				// push the borough count totals to the bvals array
 				bvals.push(bx);
 				bvals.push(bk);
 				bvals.push(m);
 				bvals.push(q);
 				bvals.push(si);
 
-
 				var percent = [];
-				for( i in bvals){
+				
+				// loops through bvals array, translates the borough counts into percents
+				for(i in bvals){
 					percent.push(((bvals[i] / boroughs.length) * 100).toFixed(2) + "%");
 				};
-
-				console.log(percent);
 
 				// this block filters out all of the duplicates in the boroughs array, leaving us with just the 5 boroughs
 				var bor = boroughs.filter(function(x, i){
@@ -61,6 +68,7 @@ $(document).ready(function(){
 
 				var data = [];
 
+				// this block executes a loop for each borough and creates objects from all the data we've been manipulating thus far
 				for(var i = 0; i < bor.length; i++){
 					var item = new Object();
 						item.key = bor[i];
@@ -69,6 +77,7 @@ $(document).ready(function(){
 						data.push(item);
 				};
 
+				// starts the chart and pie creation functions
 				chartIt(data);
 				pieIt(data);
 			});
@@ -95,7 +104,6 @@ $(document).ready(function(){
 				.attr("class", "citySvg")
 				.attr("width", w + margin.left + margin.right)
 				.attr("height", h + margin.top + margin.bottom);
-				// .attr("transform", "translate( 0, " + 100 +")");
 
 			var xScale = d3.scale.ordinal()
 				.domain(data.map(function (d){ return d.key;}))
