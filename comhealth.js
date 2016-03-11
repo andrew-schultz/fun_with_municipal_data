@@ -1,77 +1,87 @@
 $(document).ready(function(){
 
 	$('#map').on('click', function(){
-		console.log(thing);
-
 		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();
 		// console.log(thing);
 		console.log(location);
 		startIt(location);
-	 });
+	});
+
 	function startIt(loc){
 		if(loc == ""){
 			console.log('error');
 		} else {
-	
-		d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
-			var comHealth = response;
-			var boroughs = []
-			for (value in comHealth){
-				boroughs.push(comHealth[value]['__name_of_borough']);
-			};
-			var bk = 0;
-			var bx = 0;
-			var si = 0;
-			var m = 0;
-			var q = 0;
-			var bvals = [];
-			for(i in boroughs){
-				if(boroughs[i] == "Brooklyn"){
-					bk += 1
-				} else if (boroughs[i] == "Bronx"){
-					bx += 1
-				} else if (boroughs[i] == "Queens"){
-					q += 1
-				} else if (boroughs[i] == "Manhattan"){
-					m += 1
-				} else {
-					si += 1
+			// queries the socrata(nyc) api 
+			d3.json("https://data.cityofnewyork.us/resource/b2sp-asbg.json?", function(error, response){
+				// sets the api response equal to a variable
+				var comHealth = response;
+				var boroughs = []
+
+				// loops through the api response and pushes the values '__name_of_borough' to an array
+				for (value in comHealth){
+					boroughs.push(comHealth[value]['__name_of_borough']);
+				};
+
+				// had to set up some helper variables for working with the data
+				var bk = 0;
+				var bx = 0;
+				var si = 0;
+				var m = 0;
+				var q = 0;
+				var bvals = [];
+
+				// loops through boroughs array, counts up each mention of a borough
+				for(i in boroughs){
+					if(boroughs[i] == "Brooklyn"){
+						bk += 1
+					} else if (boroughs[i] == "Bronx"){
+						bx += 1
+					} else if (boroughs[i] == "Queens"){
+						q += 1
+					} else if (boroughs[i] == "Manhattan"){
+						m += 1
+					} else {
+						si += 1
+					};
+					
 				};
 				
-			};
-		
-			bvals.push(bx);
-			bvals.push(bk);
-			bvals.push(m);
-			bvals.push(q);
-			bvals.push(si);
+				// push the borough count totals to the bvals array
+				bvals.push(bx);
+				bvals.push(bk);
+				bvals.push(m);
+				bvals.push(q);
+				bvals.push(si);
 
+				var percent = [];
+				
+				// loops through bvals array, translates the borough counts into percents
+				for(i in bvals){
+					percent.push(((bvals[i] / boroughs.length) * 100).toFixed(2) + "%");
+				};
 
-			var percent = [];
-			for( i in bvals){
-				percent.push(((bvals[i] / boroughs.length) * 100).toFixed(2) + "%");
-			};
+				// this block filters out all of the duplicates in the boroughs array, leaving us with just the 5 boroughs
+				var bor = boroughs.filter(function(x, i){
+					return boroughs.indexOf(x) == i;
+				});
 
-			console.log(percent);
+				var data = [];
 
-			// this block filters out all of the duplicates in the boroughs array, leaving us with just the 5 boroughs
-			var bor = boroughs.filter(function(x, i){
-				return boroughs.indexOf(x) == i;
+				// this block executes a loop for each borough and creates objects from all the data we've been manipulating thus far
+				for(var i = 0; i < bor.length; i++){
+					var item = new Object();
+						item.key = bor[i];
+						item.value = bvals[i];
+						item.percent = percent[i];
+						data.push(item);
+				};
+
+				// starts the chart and pie creation functions
+				chartIt(data);
+				pieIt(data);
 			});
-
-			var data = [];
-			for(var i = 0; i < bor.length; i++){
-				var item = new Object();
-					item.key = bor[i];
-					item.value = bvals[i];
-					item.percent = percent[i];
-					data.push(item);
-			};
-			chartIt(data);
-			pieIt(data);
-		});
-	};
+		};
 
 		function chartIt(data){
 			var margin = {
@@ -176,7 +186,7 @@ $(document).ready(function(){
 				.attr("text-anchor", "middle")
 				.attr("transform", "translate(" + ((w/2)+ 40) + ", 36)")
 				.style("font-family", "Avenir")
-				.text("Community Health Center Distrubution");
+				.text("Distrubution Across Boroughs");
 		};
 
 		function pieIt(data){
@@ -202,7 +212,7 @@ $(document).ready(function(){
 				.attr("width", width)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
-				.attr("transform", "translate(" + width / 2 + "," + ((height / 2) + 50) + ")");
+				.attr("transform", "translate(" + width / 2 + "," + ((height / 2) + 60) + ")");
 
 			var arc = d3.svg.arc()
 				.outerRadius(radius - 10)
@@ -259,7 +269,7 @@ $(document).ready(function(){
 				.attr("class", "pietitle")
 				.attr("text-anchor", "middle")
 				.attr("transform", "translate( 0 , -200)")
-				.text("Community Health Center Distrubution by Percent");
+				.text("Distrubution by Percent");
 
 				function type(d) {
 					d.value = +d.value;

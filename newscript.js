@@ -1,5 +1,4 @@
-// $(document).ready(function(){
-	// var locat = $('#map').val();
+$(document).ready(function(){
 	var tables = [
 		"B01001", //age by sex
 		"B14001", //current enrollment by age education
@@ -7,17 +6,15 @@
 		"B02001"  //race
 		];
 
-// console.log(locat)
-
 	$("#map").on('click', function(){
 
 		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();
 		// console.log(thing);
 		console.log(location);
-		startIt(location);
+		initialize(location);
 	 });
-	function startIt(loc){
+	function initialize(loc){
 		if(loc == ""){
 			console.log('error');
 		} else {
@@ -248,14 +245,12 @@ function visualizeIt(ds, ti) {
 		.attr("class", "xaxislabel graphlabel")
 		.attr("text-anchor", "middle")
 		.attr("transform", "translate(" + (w/2) + "," + (h + (margin.bottom / 2) + 60) + ")")
-		// .text("Educational Level");
 
 	// add Y Axis label
 	svg.append("text")
 		.attr("class", "yaxislabel graphlabel")
 		.attr("text-anchor", "middle")
 		.attr("transform", "translate(15," + (h / 2) + ")rotate(-90)")
-		// .text("Number of People Enrolled");
 
 	// add Title for chart
 	svg.append("text")
@@ -285,8 +280,6 @@ function visualizeIt(ds, ti) {
 
 		var radius = Math.min(width, height) / 2;
 
-		// var currentVal;
-
 		var color = d3.scale.ordinal()
 			.range(["#F6776A", "#024E83", "#97DCDD", "#DC4032", "#78C652"]);
 			
@@ -294,8 +287,6 @@ function visualizeIt(ds, ti) {
 			.sort(null)
 			.value(function(d) { return d.value });
 
-		//Create the SVG element
-		
 		var arc = d3.svg.arc()
 			.outerRadius(radius - 10)
 			.innerRadius(radius - (radius/2));
@@ -307,14 +298,14 @@ function visualizeIt(ds, ti) {
 			.attr("height", h + margin.top + margin.bottom)
 			.append("g")
 			.attr("transform", "translate(" + ((width /2) + 35) +"," + ((height/ 2) + 20 ) + ")");
+		
 		var newtitle
+		
 		function ntitle(d){
-			// console.log(d);
 			if(d.length > 35){
 				var s = d.substr(29, 37);
 				var v = s.replace(/\s/, "\n");
 				var Ttitle = d.replace(s, v);
-				// console.log(ntitle);
 				return Ttitle;
 			} else {
 				return ti;
@@ -322,15 +313,6 @@ function visualizeIt(ds, ti) {
 		};
 
 		newtitle = ntitle(ti);
-		// console.log(newtitle)
-
-		// svg.append("text")
-		// 	.attr("width", width/ 2)
-		// 	.attr("class", "chartTitle graphlabel")
-		// 	.attr("text-anchor", "middle")
-		// 	.attr("transform", "translate( 0 , -200)")
-		// 	.style("font-family", "Avenir")
-		// 	.text(newtitle);
 			
 		var g = svg.selectAll(".arc")
 			.data(pie(ds))
@@ -376,7 +358,6 @@ function visualizeIt(ds, ti) {
 				.text(function(d){
 					return [obj.value];
 				});
-				// .attr("transform", "translate(0, 20)");
 		});
 
 		g.on("mouseout", function(obj){
@@ -393,6 +374,6 @@ function visualizeIt(ds, ti) {
 		$(".pieSideDiv").remove();
 		$("#bName").remove();
 	};
-// });
+});
 
 			
