@@ -14,6 +14,7 @@ body {
 	padding-top: 100px;
 	border-radius: 10px;
 	display: none;
+	margin-top: 30px;
 }
 
 #bName {
@@ -55,16 +56,16 @@ body {
 
 .legend {
 	vertical-align: top;
-	margin-left: -600px;
-	margin-top: 60px;
+	margin-left: 6%;
+	margin-top: -380px;
 }
 
 #pie1 {
-	margin-left: -50.20%;
-	margin-top: 24px;
+	/*margin-left: -50.20%;*/
 	display: inline-block;
 	width: 45%;
 	position: relative;
+
 }
 
 nav {
@@ -87,23 +88,25 @@ nav ul li {
 	border-radius: 10px;
 	display: inline-block;
 	width: 45%;
-	right: -120%;
+	/*right: -120%;*/
 	position: relative;
+	margin-left: 3.5%;
+	top: -8px;
 }
 
-#back{
+.back{
 	width: 100%;
 	text-align: center;
 }
 
-#up {
+.up {
 	font-size: 15px;
 	padding-bottom: 10px;
 }
 
 #gchart {
-	margin-left: -50.20%;
-	margin-top: 20px;
+	margin-left: 1%;
+	top: -15px;
 	display: inline-block;
 	width: 45%;
 	position: relative;
@@ -113,14 +116,35 @@ nav ul li {
 	border-radius: 10px;
 	display: inline-block;
 	width: 45%;
-	right: -120%;
+	margin-left: 3%;
+	/*right: -120%;*/
 	position: relative;
+}
+
+.cityTitle {
+	width: 100%;
+	text-align: center;
+	padding-top: 1px;
+}
+
+.cityTitleP {
+	font-size: 30px;
+	color: #2B3E42;
+}
+
+#communityGardens {
+	background-color: #ffffff;
+	border-radius: 10px;
+	width: 90%;
+	margin: 0 auto;
+	margin-top: 30px;
+	display: none;
 }
 
 #locationName {
 	width: 30%;
 	color: #2B3E42;
-	margin-top: -31%;
+	margin-top: -33%;
 	margin-left: 33%;
 	padding: 30px;
 	background-color: #ffffff;
@@ -133,7 +157,7 @@ nav ul li {
 
 #map { 
 	width: 100%; 
-	height: 746px;
+	height: 769px;
 }
 
 #header {
@@ -162,6 +186,15 @@ nav ul li {
 
 #health {
 	left: 70px;
+}
+
+#healthCenters {
+	width: 90%;
+	margin: 0 auto;
+	background-color: #ffffff;
+	border-radius: 10px;
+	margin-top: 30px;
+	display: none;
 }
 
 #info {
@@ -283,7 +316,8 @@ rect:hover {
 }
 
 #footer {
-	height: 65px;
+	height: 40px;
 	width: 100%;
+	display: none;
 }
 

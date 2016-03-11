@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-	$('#up').on('click', function(){
+	$('.up').on('click', function(){
 		$('html, body').animate({
 			scrollTop: $('#header').offset().top
 		}, 1250);
@@ -9,52 +9,43 @@ $(document).ready(function(){
 	$('#map').on('click', function(){
 		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();
-		// console.log(thing);
-		console.log(location);
+
+		// starts the whole thing in motion
 		startIt(location);
 	 });
 	function startIt(loc){
 		if(loc == ""){
 			console.log('error');
 		} else {
-
-		$('#pie1').delay(450).animate({
-			left: '55.25%',
-		});
-
-		$('#hchart').delay(450).animate({
-			right: '-56.75%',
-		});
-
-		$('#gchart').delay(600).animate({
-			left: '55.25%',
-		});
-
-		$('#pie2').delay(600).animate({
-			right: '-56.75%',
-		});
-
-		//move the page down to the newly generated graphs, help the user out		
-		$("html, body").delay(500).animate({
-			scrollTop: $('#pie1').offset().top
-		}, 800);
-		$("#selectedBoroughs").fadeIn(400);
-
-
-
+			$("#selectedBoroughs").fadeIn(400);
+			$("#healthCenters").fadeIn(400);
+			$("#communityGardens").fadeIn(400);
+			$("#footer").fadeIn(400);
+			
+			//move the page down to the newly generated graphs, help the user out		
+			$("html, body").delay(500).animate({
+				scrollTop: $('#selectedBoroughs').offset().top
+			}, 800);
 
 		d3.json("https://data.cityofnewyork.us/resource/ajxm-kzmj.json", function(error, response){
+			// set the api response equal to a variable
 			var garden = response;
 			var boroughs = []
+
+			// loops through the api response and pushes the values 'boro' to an array
 			for (x in garden){
 				boroughs.push(garden[x]['boro']);
 			};
+
+			// had to set up some helper variables for working with the data
 			var bk = 0;
 			var bx = 0;
 			var si = 0;
 			var m = 0;
 			var q = 0;
 			var bvals = [];
+
+			// loops through boroughs array, counts up each mention of a borough
 			for(i in boroughs){
 				if(boroughs[i] == "B"){
 					bk += 1
@@ -69,6 +60,7 @@ $(document).ready(function(){
 				};
 			};
 
+			// psuh the borough count totals to the bvals array
 			bvals.push(bx);
 			bvals.push(bk);
 			bvals.push(m);
@@ -76,18 +68,13 @@ $(document).ready(function(){
 			bvals.push(si);
 
 			var percent = [];
+
 			for(i in bvals){
 				// percent.push(bvals[i])
 				percent.push(((bvals[i] / boroughs.length) * 100).toFixed(2) + "%");
 			};
-			console.log(percent);
 
-			// this block filters out all of the duplicates in the boroughs array, leaving us with just the 5 boroughs
-			// var bor = boroughs.filter(function(x, i){
-			// 	return boroughs.indexOf(x) == i;
-			// });
 			var bor = ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"];
-			console.log(bor);
 
 			var data = [];
 			for (var i = 0; i < bor.length; i++){
@@ -97,7 +84,7 @@ $(document).ready(function(){
 					item.percent = percent[i];
 					data.push(item);
 			};
-			console.log(data);
+
 			chartIt(data);
 			pieIt(data);
 		});
@@ -206,7 +193,7 @@ $(document).ready(function(){
 			.attr("text-anchor", "middle")
 			.attr("transform", "translate(" + ((w/2)+ 40) + ", 36)")
 			.style("font-family", "Avenir")
-			.text("'GreenThumb' Community Garden Distrubution");
+			.text("Distrubution Across Boroughs");
 	};
 
 		function pieIt(data){
@@ -232,7 +219,7 @@ $(document).ready(function(){
 				.attr("width", width)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g")
-				.attr("transform", "translate(" + width / 2 + "," + ((height / 2) + 50) + ")");
+				.attr("transform", "translate(" + width / 2 + "," + ((height / 2) + 60) + ")");
 
 			var arc = d3.svg.arc()
 				.outerRadius(radius - 10)
@@ -290,7 +277,7 @@ $(document).ready(function(){
 				.attr("class", "pietitle")
 				.attr("text-anchor", "middle")
 				.attr("transform", "translate( 0 , -200)")
-				.text("'GreenThumb' Community Garden Distrubution by Percent");
+				.text("Distrubution by Percent");
 
 				function type(d) {
 					d.value = +d.value;
