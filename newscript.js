@@ -12,9 +12,9 @@ $(document).ready(function(){
 		var location = $('#map').val();
 		// console.log(thing);
 		console.log(location);
-		startIt(location);
+		initialize(location);
 	 });
-	function startIt(loc){
+	function initialize(loc){
 		if(loc == ""){
 			console.log('error');
 		} else {
