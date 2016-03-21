@@ -171,12 +171,12 @@ function visualizeIt(ds, ti) {
 		svg.append("text")
 			.attr("id", "info");
 
-		// get the x and y positions for the popup in question
-		var xPos = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand()/2;
-		var yPos = parseFloat(d3.select(this).attr("y")) + 18;
-		
-		// add the actual info
-		svg.select("#info")
+			// get the x and y positions for the popup in question
+			var xPos = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand()/2;
+			var yPos = parseFloat(d3.select(this).attr("y")) + 18;
+			
+			// add the actual info
+			svg.select("#info")
 			.attr("x", xPos)
 			.attr("y", function(){
 				// if the bar is very small, diplay the tooltip above it instead of trying to cram it inside
