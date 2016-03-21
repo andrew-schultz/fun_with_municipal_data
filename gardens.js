@@ -193,7 +193,7 @@ $(document).ready(function(){
 			.attr("text-anchor", "middle")
 			.attr("transform", "translate(" + ((w/2)+ 40) + ", 36)")
 			.style("font-family", "Avenir")
-			.text("Distrubution Across Boroughs");
+			.text("Distribution Across Boroughs");
 	};
 
 		function pieIt(data){
@@ -277,7 +277,7 @@ $(document).ready(function(){
 				.attr("class", "pietitle")
 				.attr("text-anchor", "middle")
 				.attr("transform", "translate( 0 , -200)")
-				.text("Distrubution by Percent");
+				.text("Distribution by Percent");
 
 				function type(d) {
 					d.value = +d.value;
