@@ -10,7 +10,6 @@ $(document).ready(function(){
 
 		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();
-		// console.log(thing);
 		console.log(location);
 		initialize(location);
 	 });
@@ -89,20 +88,15 @@ $(document).ready(function(){
 
 				console.log(dataset);
 				// calls the function that actually builds the charts
-				visualizeIt(dataset, title);
-				mathIt(dataset, title);
+				visualize(dataset, title);
 				});
 			};
 		};
 	};	
 };
 
-function mathIt(ds, ti){
-	console.log(ds);
-};
-
 // this function constructs the charts
-function visualizeIt(ds, ti) {
+function visualize(ds, ti) {
 	// set a variable the longest chart column label, to be used for defining the length of the area alloted for labels
 	var bot = d3.max(ds, function(d) {return d.key.length; } );
 
@@ -261,10 +255,10 @@ function visualizeIt(ds, ti) {
 		.text(ti.toUpperCase());
 
 		// take the current data being passed for dataset and title and give it to the donut creation function
-		donutIt(ds, ti);
+		donut_viz(ds, ti);
 }
 
-	function donutIt(ds, ti){
+	function donut_viz(ds, ti){
 
 		var margin = {
 		top: 50, 
