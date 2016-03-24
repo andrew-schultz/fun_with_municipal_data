@@ -3,12 +3,11 @@ $(document).ready(function(){
 	$('#map').on('click', function(){
 		// this should grab the location id of the selected borough from the map
 		var location = $('#map').val();
-		// console.log(thing);
 		console.log(location);
-		startIt(location);
+		initialize(location);
 	});
 
-	function startIt(loc){
+	function initialize(loc){
 		if(loc == ""){
 			console.log('error');
 		} else {
@@ -78,12 +77,12 @@ $(document).ready(function(){
 				};
 
 				// starts the chart and pie creation functions
-				chartIt(data);
-				pieIt(data);
+				chart_viz(data);
+				pie_viz(data);
 			});
 		};
 
-		function chartIt(data){
+		function chart_viz(data){
 			var margin = {
 				top: 30,
 				right: 40,
@@ -189,7 +188,7 @@ $(document).ready(function(){
 				.text("Distribution Across Boroughs");
 		};
 
-		function pieIt(data){
+		function pie_viz(data){
 
 			var margin = {
 				top: 30,

@@ -11,9 +11,9 @@ $(document).ready(function(){
 		var location = $('#map').val();
 
 		// starts the whole thing in motion
-		startIt(location);
+		initialize(location);
 	 });
-	function startIt(loc){
+	function initialize(loc){
 		if(loc == ""){
 			console.log('error');
 		} else {
@@ -85,12 +85,12 @@ $(document).ready(function(){
 					data.push(item);
 			};
 
-			chartIt(data);
-			pieIt(data);
+			chart_viz(data);
+			pie_viz(data);
 		});
 	};
 
-	function chartIt(data){
+	function chart_viz(data){
 		var margin = {
 			top: 30,
 			right: 40,
@@ -196,7 +196,7 @@ $(document).ready(function(){
 			.text("Distribution Across Boroughs");
 	};
 
-		function pieIt(data){
+		function pie_viz(data){
 
 			var margin = {
 				top: 30,
