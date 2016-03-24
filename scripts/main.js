@@ -28,10 +28,10 @@ $(document).ready(function(){
 		if(location == null){
 			console.log(error);
 		} else {
-			titleIt(location, table);
+			create_title(location, table);
 		};
 	
-		function titleIt(loc, t){	
+		function create_title(loc, t){	
 			d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + t + "&geo_ids="+loc, function(error,response) {
 				var locationN = response.geography[loc]['name'];
 				console.log(locationN);
@@ -49,9 +49,9 @@ $(document).ready(function(){
 			var location = String(location);
 			
 			// calls function that finds the location of the first table and posts it to the page
-			chartIt(location, table);
+			chart_viz(location, table);
 			
-			function chartIt(loc, t){
+			function chart_viz(loc, t){
 
 				// queries the census api with the current location and table
 				d3.json("http://api.censusreporter.org/1.0/data/show/latest?table_ids=" + t + "&geo_ids=" +loc, function(error,response) {
